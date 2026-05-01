@@ -1,22 +1,22 @@
-name: Deploy Website
+name: CI/CD Deploy
 
 on:
   push:
     branches:
       - main
 
+permissions:
+  contents: write   # 🔥 IMPORTANT (fix for error 128)
+
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📥 Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: ✅ Run Test
-        run: echo "No errors found"
-
-      - name: 🚀 Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
