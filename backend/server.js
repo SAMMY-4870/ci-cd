@@ -3,13 +3,13 @@ const app = express();
 
 app.use(express.json());
 
+// 🔥 IMPORTANT FIX
+const PORT = process.env.PORT || 8080;
+
 app.get("/", (req, res) => {
-  res.send("CloudShip API Running 🚀");
+  res.send("Hello from CloudShip 🚀");
 });
 
-app.post("/order", (req, res) => {
-  const order = req.body;
-  res.json({ message: "Order received", order });
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
-
-app.listen(3000, () => console.log("Server running"));
