@@ -1,13 +1,20 @@
+# 🔹 Base image
 FROM node:18
 
+# 🔹 Working directory
 WORKDIR /app
 
+# 🔹 Copy backend code
 COPY backend ./backend
 
+# 🔹 Move inside backend
 WORKDIR /app/backend
 
-RUN npm install
+# 🔹 Install dependencies
+RUN npm install --production
 
-EXPOSE 3000
+# 🔥 IMPORTANT: Cloud Run port
+EXPOSE 8080
 
+# 🔹 Start server
 CMD ["node", "server.js"]
