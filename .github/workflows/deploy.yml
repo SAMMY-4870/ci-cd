@@ -6,7 +6,7 @@ on:
       - main
 
 permissions:
-  contents: write   # 🔥 IMPORTANT (fix for error 128)
+  contents: write
 
 jobs:
   deploy:
@@ -16,8 +16,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./
+          publish_branch: gh-pages   # 🔥 IMPORTANT
