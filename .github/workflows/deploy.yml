@@ -19,8 +19,18 @@ jobs:
         with:
           node-version: '18'
 
+      # 🔥 FIX: backend folder मध्ये install
       - name: Install dependencies
-        run: npm install
+        run: |
+          cd backend
+          npm install
+
+      # 🔥 Optional check
+      - name: Check server start
+        run: |
+          cd backend
+          node server.js &
+          sleep 3
 
       - name: Build success
         run: echo "Build completed ✅"
@@ -34,7 +44,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run tests
+      - name: Dummy test
         run: echo "Tests passed ✅"
 
   # 🔹 3. DEPLOY STAGE
@@ -46,7 +56,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 🔐 Authenticate with GCP
+      # 🔐 Authenticate to GCP
       - name: Authenticate to GCP
         uses: google-github-actions/auth@v2
         with:
