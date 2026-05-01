@@ -1,12 +1,14 @@
-name: CI/CD Deploy
+name: Deploy to Google Cloud
 
 on:
   push:
     branches:
       - main
 
-permissions:
-  contents: write
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  SERVICE: cloudship-app
+  REGION: asia-south1
 
 jobs:
   deploy:
@@ -14,11 +16,21 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
-          publish_branch: gh-pages   # 🔥 IMPORTANT
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud builds submit --tag gcr.io/$PROJECT_ID/$SERVICE
+          gcloud run deploy $SERVICE \
+            --image gcr.io/$PROJECT_ID/$SERVICE \
+            --platform managed \
+            --region $REGION \
+            --allow-unauthenticated
