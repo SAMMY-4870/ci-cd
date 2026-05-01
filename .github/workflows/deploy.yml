@@ -5,11 +5,6 @@ on:
     branches:
       - main
 
-env:
-  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  SERVICE: cloudship-app
-  REGION: asia-south1
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -26,11 +21,17 @@ jobs:
       - name: Setup gcloud
         uses: google-github-actions/setup-gcloud@v2
 
+      - name: Set Project
+        run: gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: Build Image
+        run: |
+          gcloud builds submit --tag gcr.io/${{ secrets.GCP_PROJECT_ID }}/cloudship-app
+
       - name: Deploy to Cloud Run
         run: |
-          gcloud builds submit --tag gcr.io/$PROJECT_ID/$SERVICE
-          gcloud run deploy $SERVICE \
-            --image gcr.io/$PROJECT_ID/$SERVICE \
+          gcloud run deploy cloudship-app \
+            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/cloudship-app \
             --platform managed \
-            --region $REGION \
+            --region asia-south1 \
             --allow-unauthenticated
