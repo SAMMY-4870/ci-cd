@@ -512,9 +512,14 @@ app.use((err, req, res, next) => {
 });
 
 // ================= START =================
-app.listen(PORT, () => {
+// ================= START =================
 
-  console.log(
-    `🚀 Server running on port ${PORT}`
-  );
+app.listen(PORT, "0.0.0.0", () => {
+
+  console.log(`
+========================================
+🚀 CLOUDSHIP SERVER STARTED
+🌍 Running on Port: ${PORT}
+========================================
+  `);
 });
