@@ -1,99 +1,114 @@
 const express = require("express");
 const cors = require("cors");
-const db = require("./firebase");
-
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const PDFDocument = require("pdfkit");
-const invoiceRoutes =
-  require("./routes/invoice");
+
+const db = require("./firebase");
+const invoiceRoutes = require("./routes/invoice");
 
 const app = express();
 
-// ================= CONFIG =================
+// ==========================================
+// CONFIG
+// ==========================================
 
-const PORT =
-  process.env.PORT || 8080;
+const PORT = process.env.PORT || 5000;
 
-const SECRET =
-  "cloudship_secret";
+const SECRET = "cloudship_secret";
 
+// ==========================================
+// MIDDLEWARE
+// ==========================================
 
-// ================= SERVER START =================
-
-app.listen(PORT, "0.0.0.0", () => {
-
-  console.log(`
-========================================
-🚀 CLOUDSHIP SERVER STARTED
-🌍 Running on Port: ${PORT}
-========================================
-  `);
-});
-
-// ================= MIDDLEWARE =================
 app.use(cors());
-app.use(express.json());
-app.use("/invoice", invoiceRoutes);
 
-// ================= LOGGER =================
+app.use(express.json());
+
 app.use((req, res, next) => {
   console.log(`📡 ${req.method} ${req.url}`);
   next();
 });
 
-// ================= HOME =================
+// ==========================================
+// ROUTES
+// ==========================================
+
+app.use("/invoice", invoiceRoutes);
+
+// ==========================================
+// HOME
+// ==========================================
+
 app.get("/", (req, res) => {
   res.send("🚀 CloudShip Advanced API Running");
 });
 
-// ================= HEALTH =================
+// ==========================================
+// HEALTH CHECK
+// ==========================================
+
 app.get("/health", (req, res) => {
   res.json({
     success: true,
-    status: "OK"
+    status: "OK",
   });
 });
 
-// ================= OTP STORE =================
+// ==========================================
+// OTP STORE
+// ==========================================
+
 let otpStore = {};
 
-// ================= SEND OTP =================
+// ==========================================
+// SEND OTP
+// ==========================================
+
 app.post("/send-otp", (req, res) => {
+  try {
+    const { mobile } = req.body;
 
-  const { mobile } = req.body;
+    if (!mobile) {
+      return res.status(400).json({
+        success: false,
+        error: "Mobile required ❌",
+      });
+    }
 
-  if (!mobile) {
-    return res.status(400).json({
-      error: "Mobile required ❌"
+    const otp = Math.floor(1000 + Math.random() * 9000);
+
+    otpStore[mobile] = otp;
+
+    console.log(`📲 OTP for ${mobile}: ${otp}`);
+
+    res.json({
+      success: true,
+      message: "OTP sent ✅",
+      otp,
+    });
+  } catch (err) {
+    console.error("SEND OTP ERROR:", err);
+
+    res.status(500).json({
+      success: false,
+      error: "OTP send failed ❌",
     });
   }
-
-  const otp =
-    Math.floor(1000 + Math.random() * 9000);
-
-  otpStore[mobile] = otp;
-
-  console.log(`OTP for ${mobile}: ${otp}`);
-
-  res.json({
-    success: true,
-    message: "OTP sent ✅",
-    otp
-  });
 });
 
-// ================= VERIFY OTP =================
+// ==========================================
+// VERIFY OTP + REGISTER
+// ==========================================
+
 app.post("/verify-otp", async (req, res) => {
-
   try {
-
     const {
       firstName,
       lastName,
       mobile,
       otp,
-      password
+      password,
     } = req.body;
 
     if (
@@ -103,13 +118,15 @@ app.post("/verify-otp", async (req, res) => {
       !password
     ) {
       return res.status(400).json({
-        error: "All fields required ❌"
+        success: false,
+        error: "All fields required ❌",
       });
     }
 
     if (otpStore[mobile] != otp) {
       return res.status(400).json({
-        error: "Invalid OTP ❌"
+        success: false,
+        error: "Invalid OTP ❌",
       });
     }
 
@@ -120,55 +137,50 @@ app.post("/verify-otp", async (req, res) => {
 
     if (!existing.empty) {
       return res.status(400).json({
-        error: "User already exists ❌"
+        success: false,
+        error: "User already exists ❌",
       });
     }
 
-    const hash =
-      await bcrypt.hash(password, 10);
+    const hash = await bcrypt.hash(password, 10);
 
     await db.collection("users").add({
-
       firstName,
       lastName,
       mobile,
-
       password: hash,
-
       role: "user",
-
-      createdAt: new Date()
+      createdAt: new Date(),
     });
 
     delete otpStore[mobile];
 
     res.json({
       success: true,
-      message: "User registered successfully ✅"
+      message: "User registered successfully ✅",
     });
-
   } catch (err) {
-
     console.error("REGISTER ERROR:", err);
 
     res.status(500).json({
-      error: "Register failed ❌"
+      success: false,
+      error: "Register failed ❌",
     });
   }
 });
 
-// ================= LOGIN =================
+// ==========================================
+// LOGIN
+// ==========================================
 
 app.post("/login", async (req, res) => {
-
   try {
-
     const { mobile, password } = req.body;
 
     if (!mobile || !password) {
-
       return res.status(400).json({
-        error: "Mobile and password required ❌"
+        success: false,
+        error: "Mobile and password required ❌",
       });
     }
 
@@ -178,147 +190,113 @@ app.post("/login", async (req, res) => {
       .get();
 
     if (snapshot.empty) {
-
       return res.status(400).json({
-        error: "User not found ❌"
+        success: false,
+        error: "User not found ❌",
       });
     }
 
-    const user =
-      snapshot.docs[0].data();
+    const user = snapshot.docs[0].data();
 
-    const match =
-      await bcrypt.compare(
-        password,
-        user.password
-      );
-
-    if (!match) {
-
-      return res.status(400).json({
-        error: "Wrong password ❌"
-      });
-    }
-
-    const SECRET =
-      "cloudship_secret";
-
-    const token =
-      jwt.sign(
-
-        {
-          mobile: user.mobile,
-          role: user.role || "user"
-        },
-
-        SECRET,
-
-        {
-          expiresIn: "2h"
-        }
-      );
-
-    res.json({
-
-      success: true,
-
-      message:
-        "Login successful ✅",
-
-      token
-    });
-
-  } catch (err) {
-
-    console.error(
-      "LOGIN ERROR:",
-      err
+    const match = await bcrypt.compare(
+      password,
+      user.password
     );
 
-    res.status(500).json({
+    if (!match) {
+      return res.status(400).json({
+        success: false,
+        error: "Wrong password ❌",
+      });
+    }
 
-      error:
-        "Login failed ❌"
+    const token = jwt.sign(
+      {
+        mobile: user.mobile,
+        role: user.role || "user",
+      },
+      SECRET,
+      {
+        expiresIn: "2h",
+      }
+    );
+
+    res.json({
+      success: true,
+      message: "Login successful ✅",
+      token,
+    });
+  } catch (err) {
+    console.error("LOGIN ERROR:", err);
+
+    res.status(500).json({
+      success: false,
+      error: "Login failed ❌",
     });
   }
 });
 
-// ================= AUTH =================
+// ==========================================
+// AUTH MIDDLEWARE
+// ==========================================
 
 function auth(req, res, next) {
-
   try {
-
     const authHeader =
       req.headers.authorization;
 
     if (!authHeader) {
-
       return res.status(401).json({
-        error: "No token ❌"
+        success: false,
+        error: "No token ❌",
       });
     }
-
-    // CHECK BEARER
 
     if (
       !authHeader.startsWith("Bearer ")
     ) {
-
       return res.status(401).json({
-        error:
-          "Invalid token format ❌"
+        success: false,
+        error: "Invalid token format ❌",
       });
     }
 
-    // EXTRACT TOKEN
+    const token = authHeader.replace(
+      "Bearer ",
+      ""
+    );
 
-    const token =
-      authHeader.replace(
-        "Bearer ",
-        ""
-      );
-
-    const SECRET =
-      "cloudship_secret";
-
-    const decoded =
-      jwt.verify(
-        token,
-        SECRET
-      );
+    const decoded = jwt.verify(
+      token,
+      SECRET
+    );
 
     req.user = decoded;
 
     next();
-
   } catch (err) {
-
-    console.log(
-      "AUTH ERROR:",
-      err.message
-    );
+    console.error("AUTH ERROR:", err);
 
     return res.status(401).json({
-      error: "Invalid token ❌"
+      success: false,
+      error: "Invalid token ❌",
     });
   }
 }
-// ================= CREATE ORDER =================
+
+// ==========================================
+// CREATE ORDER
+// ==========================================
+
 app.post("/order", auth, async (req, res) => {
-
   try {
-
     const {
-
       name,
       mobile,
       address,
       medicine,
-
       quantity,
-      price
-
+      price,
     } = req.body;
 
     if (
@@ -328,194 +306,210 @@ app.post("/order", auth, async (req, res) => {
       !medicine
     ) {
       return res.status(400).json({
-        error: "Complete details required ❌"
+        success: false,
+        error: "Complete details required ❌",
       });
     }
 
-    const tax = price * 0.18;
+    const qty = Number(quantity || 1);
+
+    const medicinePrice =
+      Number(price || 0);
+
+    const tax = medicinePrice * 0.18;
 
     const deliveryCharge = 40;
 
     const total =
-      (price * quantity)
-      + tax
-      + deliveryCharge;
+      medicinePrice * qty +
+      tax +
+      deliveryCharge;
 
-    const doc =
-      await db.collection("orders").add({
-
+    const doc = await db
+      .collection("orders")
+      .add({
         name,
         mobile,
         address,
         medicine,
-
-        quantity,
-        price,
-
+        quantity: qty,
+        price: medicinePrice,
         tax,
         deliveryCharge,
         total,
-
         status: "Pending",
-
-        createdAt: new Date()
+        createdAt: new Date(),
       });
 
     res.json({
       success: true,
       message: "Order placed ✅",
-      id: doc.id
+      id: doc.id,
     });
-
   } catch (err) {
-
     console.error("ORDER ERROR:", err);
 
     res.status(500).json({
-      error: "Order failed ❌"
+      success: false,
+      error: "Order failed ❌",
     });
   }
 });
 
-// ================= GET ORDERS =================
+// ==========================================
+// GET ORDERS
+// ==========================================
+
 app.get("/orders", async (req, res) => {
-
   try {
-
-    const snapshot =
-      await db.collection("orders")
+    const snapshot = await db
+      .collection("orders")
       .orderBy("createdAt", "desc")
       .get();
 
-    const orders = snapshot.docs.map(doc => {
+    const orders = snapshot.docs.map(
+      (doc) => {
+        const data = doc.data();
 
-      const data = doc.data();
-
-      return {
-
-        id: doc.id,
-
-        name: data.name,
-        mobile: data.mobile,
-        address: data.address,
-        medicine: data.medicine,
-
-        quantity: data.quantity,
-        price: data.price,
-
-        tax: data.tax,
-        deliveryCharge: data.deliveryCharge,
-        total: data.total,
-
-        status: data.status,
-
-        createdAt:
-          data.createdAt
-          .toDate()
-          .toLocaleString()
-      };
-    });
+        return {
+          id: doc.id,
+          name: data.name,
+          mobile: data.mobile,
+          address: data.address,
+          medicine: data.medicine,
+          quantity: data.quantity,
+          price: data.price,
+          tax: data.tax,
+          deliveryCharge:
+            data.deliveryCharge,
+          total: data.total,
+          status: data.status,
+          createdAt: data.createdAt
+            ?.toDate()
+            ?.toLocaleString(),
+        };
+      }
+    );
 
     res.json({
       success: true,
       count: orders.length,
-      data: orders
+      data: orders,
     });
-
   } catch (err) {
-
-    console.error("GET ERROR:", err);
+    console.error("GET ORDERS ERROR:", err);
 
     res.status(500).json({
-      error: "Fetch failed ❌"
+      success: false,
+      error: "Fetch failed ❌",
     });
   }
 });
 
-// ================= UPDATE STATUS =================
-app.put("/order/:id", auth, async (req, res) => {
+// ==========================================
+// UPDATE ORDER STATUS
+// ==========================================
 
-  try {
+app.put(
+  "/order/:id",
+  auth,
+  async (req, res) => {
+    try {
+      const { status } = req.body;
 
-    const { status } = req.body;
+      await db
+        .collection("orders")
+        .doc(req.params.id)
+        .update({
+          status,
+        });
 
-    await db.collection("orders")
-      .doc(req.params.id)
-      .update({ status });
+      res.json({
+        success: true,
+        message: "Status updated 🔄",
+      });
+    } catch (err) {
+      console.error(
+        "UPDATE STATUS ERROR:",
+        err
+      );
 
-    res.json({
-      success: true,
-      message: "Status updated 🔄"
-    });
-
-  } catch (err) {
-
-    console.error("UPDATE ERROR:", err);
-
-    res.status(500).json({
-      error: "Update failed ❌"
-    });
+      res.status(500).json({
+        success: false,
+        error: "Update failed ❌",
+      });
+    }
   }
-});
+);
 
-// ================= TRACKING =================
-app.put("/tracking/:id", async (req, res) => {
+// ==========================================
+// TRACKING
+// ==========================================
 
-  const { status } = req.body;
+app.put(
+  "/tracking/:id",
+  async (req, res) => {
+    try {
+      const { status } = req.body;
 
-  const allowed = [
+      const allowed = [
+        "Pending",
+        "Packed",
+        "Out For Delivery",
+        "Delivered",
+      ];
 
-    "Pending",
+      if (!allowed.includes(status)) {
+        return res.status(400).json({
+          success: false,
+          error: "Invalid status ❌",
+        });
+      }
 
-    "Packed",
+      await db
+        .collection("orders")
+        .doc(req.params.id)
+        .update({
+          status,
+        });
 
-    "Out For Delivery",
+      res.json({
+        success: true,
+        message:
+          "Tracking updated 🚚",
+      });
+    } catch (err) {
+      console.error(
+        "TRACKING ERROR:",
+        err
+      );
 
-    "Delivered"
-  ];
-
-  if (!allowed.includes(status)) {
-
-    return res.status(400).json({
-      error: "Invalid status ❌"
-    });
+      res.status(500).json({
+        success: false,
+        error: "Tracking failed ❌",
+      });
+    }
   }
+);
 
-  await db.collection("orders")
-    .doc(req.params.id)
-    .update({ status });
+// ==========================================
+// GLOBAL ERROR HANDLER
+// ==========================================
 
-  res.json({
-    success: true,
-    message: "Tracking updated 🚚"
-  });
-});
-
-
-
-
-
-
-
-
-
-
-
-// ================= GLOBAL ERROR =================
 app.use((err, req, res, next) => {
-
   console.error("GLOBAL ERROR:", err);
 
   res.status(500).json({
-    error: "Something went wrong ❌"
+    success: false,
+    error: "Something went wrong ❌",
   });
 });
 
-// ================= START =================
-// ================= START =================
+// ==========================================
+// SERVER START
+// ==========================================
 
 app.listen(PORT, "0.0.0.0", () => {
-
   console.log(`
 ========================================
 🚀 CLOUDSHIP SERVER STARTED
