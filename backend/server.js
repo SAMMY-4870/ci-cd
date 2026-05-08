@@ -1,5 +1,7 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
+
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
@@ -31,22 +33,31 @@ app.use((req, res, next) => {
 });
 
 // ======================================
-// HOME
+// FRONTEND STATIC FILES
+// ======================================
+
+app.use(
+  express.static(
+    path.join(__dirname, "../frontend")
+  )
+);
+
+// ======================================
+// HOME PAGE
 // ======================================
 
 app.get("/", (req, res) => {
 
-  res.json({
-
-    success: true,
-
-    message:
-      "🚀 CloudShip Backend Running"
-  });
+  res.sendFile(
+    path.join(
+      __dirname,
+      "../frontend/index.html"
+    )
+  );
 });
 
 // ======================================
-// HEALTH
+// HEALTH CHECK
 // ======================================
 
 app.get("/health", (req, res) => {
@@ -108,7 +119,7 @@ app.post("/send-otp", (req, res) => {
   } catch (err) {
 
     console.error(
-      "SEND OTP ERROR:",
+      "OTP ERROR:",
       err
     );
 
@@ -116,7 +127,8 @@ app.post("/send-otp", (req, res) => {
 
       success: false,
 
-      error: "OTP failed ❌"
+      error:
+        "OTP failed ❌"
     });
   }
 });
@@ -161,7 +173,8 @@ app.post("/verify-otp", async (req, res) => {
 
         success: false,
 
-        error: "Invalid OTP ❌"
+        error:
+          "Invalid OTP ❌"
       });
     }
 
@@ -256,7 +269,8 @@ app.post("/login", async (req, res) => {
 
         success: false,
 
-        error: "User not found ❌"
+        error:
+          "User not found ❌"
       });
     }
 
@@ -339,7 +353,8 @@ function auth(req, res, next) {
 
         success: false,
 
-        error: "No token ❌"
+        error:
+          "No token ❌"
       });
     }
 
@@ -538,7 +553,7 @@ app.get("/orders", async (req, res) => {
   } catch (err) {
 
     console.error(
-      "GET ORDERS ERROR:",
+      "GET ERROR:",
       err
     );
 
@@ -578,7 +593,7 @@ app.put(
         success: true,
 
         message:
-          "Order updated ✅"
+          "Status updated ✅"
       });
 
     } catch (err) {
@@ -632,7 +647,7 @@ app.put(
           success: false,
 
           error:
-            "Invalid tracking status ❌"
+            "Invalid status ❌"
         });
       }
 

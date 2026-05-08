@@ -8,6 +8,8 @@ RUN npm install --production
 
 COPY backend ./
 
+COPY frontend ./frontend
+
 EXPOSE 8080
 
 ENV PORT=8080
