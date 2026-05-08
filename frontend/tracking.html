@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Track Order</title>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial;
+    }
+
+    body{
+      background:#f4f7fb;
+      padding:30px;
+    }
+
+    .container{
+
+      max-width:700px;
+
+      margin:auto;
+
+      background:white;
+
+      padding:30px;
+
+      border-radius:20px;
+
+      box-shadow:0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h1{
+      text-align:center;
+      margin-bottom:30px;
+      color:#333;
+    }
+
+    .search{
+      display:flex;
+      gap:10px;
+      margin-bottom:30px;
+    }
+
+    input{
+      flex:1;
+      padding:14px;
+      border:1px solid #ddd;
+      border-radius:10px;
+      font-size:16px;
+    }
+
+    button{
+      padding:14px 20px;
+      border:none;
+      background:#007bff;
+      color:white;
+      border-radius:10px;
+      cursor:pointer;
+    }
+
+    .card{
+      background:#fafafa;
+      padding:20px;
+      border-radius:15px;
+      margin-top:20px;
+    }
+
+    .info{
+      margin:10px 0;
+      color:#555;
+    }
+
+    .timeline{
+      margin-top:30px;
+      position:relative;
+    }
+
+    .step{
+      display:flex;
+      align-items:center;
+      margin-bottom:30px;
+      position:relative;
+    }
+
+    .circle{
+
+      width:35px;
+      height:35px;
+
+      border-radius:50%;
+
+      background:#ccc;
+
+      color:white;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      font-weight:bold;
+
+      margin-right:20px;
+
+      z-index:2;
+    }
+
+    .active{
+      background:#28a745;
+    }
+
+    .line{
+
+      position:absolute;
+
+      left:16px;
+      top:35px;
+
+      width:4px;
+      height:45px;
+
+      background:#ddd;
+    }
+
+    .status{
+      font-size:18px;
+      font-weight:bold;
+    }
+
+    .done{
+      color:#28a745;
+    }
+
+    .pending{
+      color:#999;
+    }
+
+    .delivery-box{
+
+      margin-top:30px;
+
+      background:#eef7ff;
+
+      padding:20px;
+
+      border-radius:15px;
+    }
+
+    .delivery-box h3{
+      margin-bottom:15px;
+      color:#007bff;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>📦 Track Your Order</h1>
+
+  <!-- SEARCH -->
+
+  <div class="search">
+
+    <input
+      type="text"
+      id="orderId"
+      placeholder="Enter Order ID"
+    >
+
+    <button onclick="trackOrder()">
+      Track
+    </button>
+
+  </div>
+
+  <!-- RESULT -->
+
+  <div id="result"></div>
+
+</div>
+
+<script>
+
+async function trackOrder(){
+
+  const id =
+    document.getElementById("orderId").value;
+
+  if(!id){
+    return alert("Enter Order ID ❌");
+  }
+
+  const res =
+    await fetch(
+      "http://localhost:5000/orders"
+    );
+
+  const result = await res.json();
+
+  const order =
+    result.data.find(o=>o.id===id);
+
+  if(!order){
+
+    return document.getElementById(
+      "result"
+    ).innerHTML = `
+      <h3>
+        Order not found ❌
+      </h3>
+    `;
+  }
+
+  const statuses = [
+
+    "Pending",
+
+    "Packed",
+
+    "Out For Delivery",
+
+    "Delivered"
+  ];
+
+  const currentIndex =
+    statuses.indexOf(order.status);
+
+  document.getElementById(
+    "result"
+  ).innerHTML = `
+
+    <div class="card">
+
+      <h2>
+        ${order.name}
+      </h2>
+
+      <div class="info">
+        📱 ${order.mobile}
+      </div>
+
+      <div class="info">
+        📍 ${order.address}
+      </div>
+
+      <div class="info">
+        💊 ${order.medicine}
+      </div>
+
+      <div class="info">
+        💰 ₹${order.total}
+      </div>
+
+      <div class="info">
+        🕒 ${order.createdAt}
+      </div>
+
+      <div class="delivery-box">
+
+        <h3>
+          🚚 Delivery Status
+        </h3>
+
+        <div class="timeline">
+
+          ${statuses.map((status,index)=>`
+
+            <div class="step">
+
+              ${
+                index < statuses.length - 1
+                ? '<div class="line"></div>'
+                : ''
+              }
+
+              <div class="
+                circle
+                ${index <= currentIndex ? 'active' : ''}
+              ">
+                ${index+1}
+              </div>
+
+              <div class="
+                status
+                ${index <= currentIndex
+                  ? 'done'
+                  : 'pending'}
+              ">
+
+                ${status}
+
+              </div>
+
+            </div>
+
+          `).join("")}
+
+        </div>
+
+      </div>
+
+    </div>
+  `;
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CloudShip Admin</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial;
+    }
+
+    body{
+      background:#f4f7fb;
+      padding:20px;
+    }
+
+    .top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:20px;
+    }
+
+    h1{
+      color:#333;
+    }
+
+    .logout{
+      background:red;
+      color:white;
+      border:none;
+      padding:10px 15px;
+      border-radius:8px;
+      cursor:pointer;
+    }
+
+    .search{
+      width:100%;
+      padding:12px;
+      border:none;
+      border-radius:10px;
+      margin-bottom:20px;
+      font-size:16px;
+      box-shadow:0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+      gap:20px;
+    }
+
+    .card{
+      background:white;
+      padding:20px;
+      border-radius:15px;
+      box-shadow:0 0 10px rgba(0,0,0,0.1);
+      transition:0.3s;
+    }
+
+    .card:hover{
+      transform:translateY(-5px);
+    }
+
+    .name{
+      font-size:22px;
+      font-weight:bold;
+      margin-bottom:10px;
+    }
+
+    .info{
+      margin:5px 0;
+      color:#555;
+    }
+
+    .status{
+      margin-top:15px;
+      padding:8px;
+      border-radius:8px;
+      border:none;
+      width:100%;
+    }
+
+    .delete{
+      margin-top:10px;
+      width:100%;
+      background:#ff4d4d;
+      color:white;
+      border:none;
+      padding:10px;
+      border-radius:8px;
+      cursor:pointer;
+    }
+
+    .stats{
+      display:flex;
+      gap:15px;
+      margin-bottom:20px;
+    }
+
+    .box{
+      flex:1;
+      background:white;
+      padding:20px;
+      border-radius:15px;
+      text-align:center;
+      box-shadow:0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .box h2{
+      color:#007bff;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="top">
+  <h1>📦 CloudShip Admin</h1>
+  <button class="logout" onclick="logout()">Logout</button>
+</div>
+
+<div class="stats">
+  <div class="box">
+    <h2 id="total">0</h2>
+    <p>Total Orders</p>
+  </div>
+
+  <div class="box">
+    <h2 id="pending">0</h2>
+    <p>Pending</p>
+  </div>
+
+  <div class="box">
+    <h2 id="delivered">0</h2>
+    <p>Delivered</p>
+  </div>
+</div>
+
+<input
+  type="text"
+  id="search"
+  class="search"
+  placeholder="🔍 Search customer..."
+  onkeyup="loadOrders()"
+/>
+
+<div class="grid" id="orders"></div>
+
+<script>
+const token = localStorage.getItem("token");
+
+if(!token){
+  window.location.href="login.html";
+}
+
+async function loadOrders(){
+
+  const res = await fetch("http://localhost:5000/orders");
+  const result = await res.json();
+
+  const data = result.data;
+
+  const search = document
+    .getElementById("search")
+    .value
+    .toLowerCase();
+
+  const filtered = data.filter(order =>
+    order.name.toLowerCase().includes(search)
+  );
+
+  document.getElementById("orders").innerHTML="";
+
+  let pending = 0;
+  let delivered = 0;
+
+  filtered.forEach(order => {
+
+    if(order.status==="Pending") pending++;
+    if(order.status==="Delivered") delivered++;
+
+    document.getElementById("orders").innerHTML += `
+      <div class="card">
+
+        <div class="name">${order.name}</div>
+
+        <div class="info">📱 ${order.mobile}</div>
+
+        <div class="info">📍 ${order.address}</div>
+
+        <div class="info">💊 ${order.medicine}</div>
+
+        <div class="info">🕒 ${order.createdAt}</div>
+
+        <select
+          class="status"
+          onchange="updateStatus('${order.id}', this.value)"
+        >
+          <option ${order.status=="Pending"?"selected":""}>
+            Pending
+          </option>
+
+          <option ${order.status=="Delivered"?"selected":""}>
+            Delivered
+          </option>
+        </select>
+
+        <button
+          class="delete"
+          onclick="deleteOrder('${order.id}')"
+        >
+          Delete Order
+        </button>
+
+      </div>
+    `;
+  });
+
+  document.getElementById("total").innerText = filtered.length;
+  document.getElementById("pending").innerText = pending;
+  document.getElementById("delivered").innerText = delivered;
+}
+
+// ================= UPDATE =================
+async function updateStatus(id,status){
+
+  await fetch(`http://localhost:5000/order/${id}`,{
+    method:"PUT",
+    headers:{
+      "Content-Type":"application/json",
+      "Authorization":token
+    },
+    body:JSON.stringify({status})
+  });
+
+  loadOrders();
+}
+
+// ================= DELETE =================
+async function deleteOrder(id){
+
+  await fetch(`http://localhost:5000/order/${id}`,{
+    method:"DELETE",
+    headers:{
+      "Authorization":token
+    }
+  });
+
+  loadOrders();
+}
+
+// ================= LOGOUT =================
+function logout(){
+  localStorage.removeItem("token");
+  window.location.href="login.html";
+}
+
+setInterval(loadOrders,3000);
+
+loadOrders();
+</script>
+
+</body>
+</html>

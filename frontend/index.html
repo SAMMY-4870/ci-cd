@@ -1,10 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>CI/CD Demo</title>
+  <title>CloudShip 🚀</title>
 </head>
 <body>
-  <h1>hello jaideep🚀</h1>
+
+  <h2>Order Medicine 💊</h2>
+
+  <input id="name" placeholder="Enter Name"><br><br>
+  <input id="medicine" placeholder="Enter Medicine"><br><br>
+
+  <button onclick="placeOrder()">Place Order</button>
+
+  <p id="msg"></p>
+
+  <script>
+    async function placeOrder() {
+      const name = document.getElementById("name").value;
+      const medicine = document.getElementById("medicine").value;
+
+      const res = await fetch("http://localhost:5000/order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ name, medicine })
+      });
+
+      const data = await res.json();
+
+      document.getElementById("msg").innerText = data.message || data.error;
+    }
+  </script>
 
 </body>
 </html>

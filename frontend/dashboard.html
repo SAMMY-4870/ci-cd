@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Orders</h2>
+<button onclick="logout()">Logout</button>
+
+<div id="orders"></div>
+
+<script>
+const token = localStorage.getItem("token");
+
+if (!token) {
+  window.location.href = "login.html";
+}
+
+async function loadOrders() {
+  const res = await fetch("http://localhost:5000/orders");
+  const data = await res.json();
+
+  const div = document.getElementById("orders");
+  div.innerHTML = "";
+
+  data.data.forEach(o => {
+    div.innerHTML += `
+      <p>${o.name} - ${o.medicine} (${o.createdAt})</p>
+    `;
+  });
+}
+
+function logout() {
+  localStorage.removeItem("token");
+  window.location.href = "login.html";
+}
+
+setInterval(loadOrders, 3000);
+loadOrders();
+</script>
+
+</body>
+</html>

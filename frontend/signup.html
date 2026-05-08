@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head><title>Signup</title></head>
+<body>
+
+<h2>Create Account</h2>
+
+<input id="firstName" placeholder="First Name"><br>
+<input id="lastName" placeholder="Last Name"><br>
+<input id="mobile" placeholder="Mobile"><br>
+
+<button onclick="sendOTP()">Send OTP</button>
+
+<br><br>
+
+<input id="otp" placeholder="Enter OTP"><br>
+<input id="password" type="password" placeholder="Password"><br>
+
+<button onclick="verifyOTP()">Register</button>
+
+<script>
+async function sendOTP() {
+  const mobile = document.getElementById("mobile").value;
+
+  const res = await fetch("http://localhost:5000/send-otp", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ mobile })
+  });
+
+  const data = await res.json();
+  alert("OTP: " + data.otp);
+}
+
+async function verifyOTP() {
+  const data = {
+    firstName: document.getElementById("firstName").value,
+    lastName: document.getElementById("lastName").value,
+    mobile: document.getElementById("mobile").value,
+    otp: document.getElementById("otp").value,
+    password: document.getElementById("password").value
+  };
+
+  const res = await fetch("http://localhost:5000/verify-otp", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(data)
+  });
+
+  const result = await res.json();
+  alert(result.message || result.error);
+}
+</script>
+
+</body>
+</html>
