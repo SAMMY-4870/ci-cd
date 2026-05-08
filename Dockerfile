@@ -5,29 +5,23 @@
 # Base Image
 FROM node:18
 
-# App Directory
+# Create App Directory
 WORKDIR /app
 
-# Copy package files first
-COPY backend/package*.json ./backend/
-
-# Move inside backend
-WORKDIR /app/backend
+# Copy package files
+COPY backend/package*.json ./
 
 # Install dependencies
 RUN npm install --production
 
-# Move back
-WORKDIR /app
-
-# Copy full backend
-COPY backend ./backend
+# Copy backend files
+COPY backend ./
 
 # Cloud Run Port
 EXPOSE 8080
 
-# Environment
+# Environment Variable
 ENV PORT=8080
 
 # Start Server
-CMD ["node", "backend/server.js"]
+CMD ["node", "server.js"]
