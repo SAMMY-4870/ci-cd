@@ -1,20 +1,33 @@
-# 🔹 Base image
+# ==============================
+# CLOUDSHIP DOCKERFILE
+# ==============================
+
+# Base Image
 FROM node:18
 
-# 🔹 Working directory
+# App Directory
 WORKDIR /app
 
-# 🔹 Copy backend code
-COPY backend ./backend
+# Copy package files first
+COPY backend/package*.json ./backend/
 
-# 🔹 Move inside backend
+# Move inside backend
 WORKDIR /app/backend
 
-# 🔹 Install dependencies
+# Install dependencies
 RUN npm install --production
 
-# 🔥 IMPORTANT: Cloud Run port
+# Move back
+WORKDIR /app
+
+# Copy full backend
+COPY backend ./backend
+
+# Cloud Run Port
 EXPOSE 8080
 
-# 🔹 Start server
-CMD ["node", "server.js"]
+# Environment
+ENV PORT=8080
+
+# Start Server
+CMD ["node", "backend/server.js"]

@@ -11,8 +11,25 @@ const invoiceRoutes =
 const app = express();
 
 // ================= CONFIG =================
-const PORT = process.env.PORT || 5000;
-const SECRET = "cloudship_secret";
+
+const PORT =
+  process.env.PORT || 8080;
+
+const SECRET =
+  "cloudship_secret";
+
+
+// ================= SERVER START =================
+
+app.listen(PORT, "0.0.0.0", () => {
+
+  console.log(`
+========================================
+🚀 CLOUDSHIP SERVER STARTED
+🌍 Running on Port: ${PORT}
+========================================
+  `);
+});
 
 // ================= MIDDLEWARE =================
 app.use(cors());
