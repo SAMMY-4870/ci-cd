@@ -44,7 +44,7 @@ async function loadOrders(){
     const res =
 
       await fetch(
-        "http://localhost:5000/orders"
+        "https://cloudship-app-584731333956.asia-south1.run.app/orders"
       );
 
     const result =
@@ -550,7 +550,7 @@ async function updateStatus(
 
     await fetch(
 
-      `http://localhost:5000/order/${id}`,
+      `https://cloudship-app-584731333956.asia-south1.run.app/order/${id}`,
 
       {
 
@@ -618,7 +618,7 @@ async function assignDelivery(
 
       await fetch(
 
-        `http://localhost:5000/order/${orderId}`,
+        `https://cloudship-app-584731333956.asia-south1.run.app/order/${orderId}`,
 
         {
 
@@ -687,7 +687,7 @@ async function deleteOrder(id){
 
     await fetch(
 
-      `http://localhost:5000/order/${id}`,
+      `https://cloudship-app-584731333956.asia-south1.run.app/order/${id}`,
 
       {
 

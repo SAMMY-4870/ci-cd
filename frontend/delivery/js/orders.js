@@ -55,7 +55,7 @@ async function loadOrders(){
 
       await fetch(
 
-        "http://localhost:5000/orders"
+        "https://cloudship-app-584731333956.asia-south1.run.app/orders"
       );
 
     const result =
@@ -314,7 +314,7 @@ async function acceptOrder(id){
 
     await fetch(
 
-      `http://localhost:5000/order/${id}`,
+      `https://cloudship-app-584731333956.asia-south1.run.app/order/${id}`,
 
       {
 
@@ -362,7 +362,7 @@ async function markDelivered(id){
 
     await fetch(
 
-      `http://localhost:5000/order/${id}`,
+      `https://cloudship-app-584731333956.asia-south1.run.app/order/${id}`,
 
       {
 

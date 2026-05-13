@@ -270,7 +270,7 @@ signupForm.addEventListener(
       const response =
         await fetch(
 
-          "http://localhost:5000/verify-otp",
+          "https://cloudship-app-584731333956.asia-south1.run.app/verify-otp",
 
           {
 

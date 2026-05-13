@@ -402,7 +402,7 @@ if(orderBtn){
 
           await fetch(
 
-            "http://localhost:5000/order",
+            "https://cloudship-app-584731333956.asia-south1.run.app/order",
 
             {
 

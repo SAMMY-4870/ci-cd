@@ -42,7 +42,7 @@ async function loadOrders(){
 
       await fetch(
 
-        "http://localhost:5000/orders"
+        "https://cloudship-app-584731333956.asia-south1.run.app/orders"
       );
 
     const result =
