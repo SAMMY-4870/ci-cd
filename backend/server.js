@@ -108,16 +108,21 @@ app.use(
 );
 
 // ======================================
+// ======================================
 // HOME PAGE
 // ======================================
 
 app.get("/", (req, res) => {
 
   res.sendFile(
+
     path.join(
+
       process.cwd(),
+
       "frontend",
-      "index.html"
+
+      "login.html"
     )
   );
 });
