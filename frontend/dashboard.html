@@ -1,41 +1,524 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>PulseRx Dashboard</title>
+
+  <!-- CSS -->
+
+  <link
+    rel="stylesheet"
+    href="css/dashboard.css"
+  />
+
+  <!-- FONT AWESOME -->
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+
+</head>
+
 <body>
 
-<h2>Orders</h2>
-<button onclick="logout()">Logout</button>
+  <!-- SIDEBAR -->
 
-<div id="orders"></div>
+<div class="sidebar">
 
-<script>
-const token = localStorage.getItem("token");
+  <div>
 
-if (!token) {
-  window.location.href = "login.html";
-}
+    <!-- LOGO -->
 
-async function loadOrders() {
-  const res = await fetch("http://localhost:5000/orders");
-  const data = await res.json();
+    <div class="logo-box">
 
-  const div = document.getElementById("orders");
-  div.innerHTML = "";
+      <img
+        src="images/pulserx-logo.png"
+        class="logo"
+      />
 
-  data.data.forEach(o => {
-    div.innerHTML += `
-      <p>${o.name} - ${o.medicine} (${o.createdAt})</p>
-    `;
-  });
-}
+      <h2>
 
-function logout() {
-  localStorage.removeItem("token");
-  window.location.href = "login.html";
-}
+        PulseRx
 
-setInterval(loadOrders, 3000);
-loadOrders();
-</script>
+      </h2>
+
+    </div>
+
+    <!-- MENU -->
+
+    <ul class="menu">
+
+      <!-- DASHBOARD -->
+
+      <li
+        class="active"
+        onclick="
+          window.location.href=
+          'dashboard.html'
+        "
+      >
+
+        <i class="fa-solid fa-house"></i>
+
+        Dashboard
+
+      </li>
+
+      <!-- AI SCANNER -->
+
+      <li
+        onclick="
+          window.location.href=
+          'scanner.html'
+        "
+      >
+
+        <i class="fa-solid fa-robot"></i>
+
+        AI Scanner
+
+      </li>
+
+      <!-- PRESCRIPTION -->
+
+      <li>
+
+        <i class="fa-solid fa-file-medical"></i>
+
+        Prescription Upload
+
+      </li>
+
+      <!-- ORDERS -->
+
+      <li
+        onclick="
+          window.location.href=
+          'orders.html'
+        "
+      >
+
+        <i class="fa-solid fa-bag-shopping"></i>
+
+        My Orders
+
+      </li>
+
+      <!-- MEDICINE -->
+
+      <li>
+
+        <i class="fa-solid fa-pills"></i>
+
+        Medicine Orders
+
+      </li>
+
+      <!-- TRACKING -->
+
+      <li
+        onclick="
+          window.location.href=
+          'tracking.html'
+        "
+      >
+
+        <i class="fa-solid fa-truck"></i>
+
+        Live Tracking
+
+      </li>
+
+      <!-- INVOICE -->
+
+      <li
+        onclick="
+          window.location.href=
+          'invoice.html'
+        "
+      >
+
+        <i class="fa-solid fa-file-invoice"></i>
+
+        Invoice
+
+      </li>
+
+      <!-- SUPPORT -->
+
+      <li>
+
+        <i class="fa-solid fa-phone"></i>
+
+        Support
+
+      </li>
+
+    </ul>
+
+  </div>
+
+  <!-- LOGOUT -->
+
+  <button
+    class="logout-btn"
+    onclick="logout()"
+  >
+
+    <i class="fa-solid fa-right-from-bracket"></i>
+
+    Logout
+
+  </button>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main-content">
+
+  <!-- TOP -->
+
+  <div class="topbar">
+
+    <div>
+
+      <h1>
+
+        Welcome Back 👋
+
+      </h1>
+
+      <p>
+
+        Manage medicines,
+        prescriptions &
+        deliveries 🚀
+
+      </p>
+
+    </div>
+
+    <!-- PROFILE -->
+
+    <div class="profile-box">
+
+      <i class="fa-solid fa-user"></i>
+
+    </div>
+
+  </div>
+
+  <!-- STATS CARDS -->
+
+  <div class="cards">
+
+    <!-- TOTAL -->
+
+    <div class="card">
+
+      <i class="fa-solid fa-pills"></i>
+
+      <h2 id="totalOrders">
+
+        24
+
+      </h2>
+
+      <p>
+
+        Total Orders
+
+      </p>
+
+    </div>
+
+    <!-- DELIVERED -->
+
+    <div class="card">
+
+      <i class="fa-solid fa-truck-fast"></i>
+
+      <h2 id="deliveredOrders">
+
+        8
+
+      </h2>
+
+      <p>
+
+        Delivered
+
+      </p>
+
+    </div>
+
+    <!-- PENDING -->
+
+    <div class="card">
+
+      <i class="fa-solid fa-clock"></i>
+
+      <h2 id="pendingOrders">
+
+        3
+
+      </h2>
+
+      <p>
+
+        Pending
+
+      </p>
+
+    </div>
+
+    <!-- PRESCRIPTIONS -->
+
+    <div class="card">
+
+      <i class="fa-solid fa-file-prescription"></i>
+
+      <h2 id="prescriptionCount">
+
+        5
+
+      </h2>
+
+      <p>
+
+        Prescriptions
+
+      </p>
+
+    </div>
+
+    <!-- AI SCANS -->
+
+    <div class="card">
+
+      <i class="fa-solid fa-robot"></i>
+
+      <h2>
+
+        AI
+
+      </h2>
+
+      <p>
+
+        Smart Scanner
+
+      </p>
+
+    </div>
+
+    <!-- LIVE TRACKING -->
+
+    <div class="card">
+
+      <i class="fa-solid fa-location-dot"></i>
+
+      <h2>
+
+        GPS
+
+      </h2>
+
+      <p>
+
+        Live Tracking
+
+      </p>
+
+    </div>
+
+  </div>
+    <!-- UPLOAD -->
+
+    <div class="section">
+
+      <div class="section-header">
+
+        <h2>
+
+          Upload Prescription
+
+        </h2>
+
+      </div>
+
+      <div class="upload-box">
+
+        <input
+          type="file"
+          id="prescriptionFile"
+        />
+
+        <button>
+
+          Upload
+
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- ORDER -->
+
+<div class="section">
+
+  <div class="section-header">
+
+    <h2>
+
+      💊 Order Medicine
+
+    </h2>
+
+  </div>
+
+  <div class="order-box">
+
+    <!-- MEDICINE -->
+
+    <div class="input-group">
+
+      <label>
+
+        Medicine Name
+
+      </label>
+
+      <input
+        type="text"
+        id="medicineName"
+        placeholder="Search Medicine..."
+        autocomplete="off"
+      />
+
+      <!-- SUGGESTIONS -->
+
+      <div
+        id="suggestions"
+        class="suggestions"
+      >
+
+      </div>
+
+    </div>
+
+    <!-- QUANTITY -->
+
+    <div class="input-group">
+
+      <label>
+
+        Quantity
+
+      </label>
+
+      <input
+        type="number"
+        id="quantity"
+        placeholder="Enter Quantity"
+        min="1"
+      />
+
+    </div>
+
+    <!-- PRICE -->
+
+    <div class="input-group">
+
+      <label>
+
+        Price (₹)
+
+      </label>
+
+      <input
+        type="number"
+        id="price"
+        placeholder="Enter Medicine Price"
+        min="1"
+      />
+
+    </div>
+
+    <!-- TOTAL -->
+
+    <div class="input-group">
+
+      <label>
+
+        Total Amount
+
+      </label>
+
+      <input
+        type="text"
+        id="totalAmount"
+        placeholder="Auto Calculated"
+        readonly
+      />
+
+    </div>
+
+    <!-- BUTTON -->
+
+    <button id="orderBtn">
+
+      <i class="fa-solid fa-cart-shopping"></i>
+
+      Place Order
+
+    </button>
+
+  </div>
+
+</div>
+    <!-- ORDERS -->
+
+    <div class="section">
+
+      <div class="section-header">
+
+        <h2>
+
+          Recent Orders
+
+        </h2>
+
+      </div>
+
+      <div id="ordersContainer">
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script
+    type="module"
+    src="js/upload.js">
+  </script>
+
+  <script src="js/dashboard.js">
+    
+  </script>
 
 </body>
+
 </html>

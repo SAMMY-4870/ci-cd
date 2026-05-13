@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>PulseRx AI Scanner</title>
+
+  <!-- CSS -->
+
+  <link
+    rel="stylesheet"
+    href="css/scanner.css"
+  />
+
+  <!-- FONT AWESOME -->
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+
+  <!-- TESSERACT -->
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js">
+  </script>
+
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- HEADER -->
+
+    <div class="top">
+
+      <h1>
+
+        🤖 AI Prescription Scanner
+
+      </h1>
+
+      <p>
+
+        Upload Prescription &
+        Detect Medicines 🚀
+
+      </p>
+
+    </div>
+
+    <!-- CARD -->
+
+    <div class="card">
+
+      <!-- FILE -->
+
+      <label
+        for="imageInput"
+        class="upload-box"
+      >
+
+        <i class="fa-solid fa-cloud-arrow-up"></i>
+
+        <p>
+
+          Click To Upload Prescription
+
+        </p>
+
+      </label>
+
+      <input
+        type="file"
+        id="imageInput"
+        accept="image/*"
+        hidden
+      />
+
+      <!-- IMAGE -->
+
+      <img
+        id="preview"
+      />
+
+      <!-- BUTTON -->
+
+      <button
+        id="scanBtn"
+      >
+
+        Scan Prescription
+
+      </button>
+
+      <!-- LOADER -->
+
+      <div
+        class="loader"
+        id="loader"
+      >
+
+        <div class="spinner"></div>
+
+        <p>
+
+          AI Scanning...
+
+        </p>
+
+      </div>
+
+      <!-- RESULT -->
+
+      <div
+        class="result"
+        id="result"
+      >
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- JS -->
+
+  <script src="js/scanner.js"></script>
+
+</body>
+
+</html>

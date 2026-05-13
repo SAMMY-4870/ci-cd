@@ -1,56 +1,240 @@
 <!DOCTYPE html>
-<html>
-<head><title>Signup</title></head>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>PulseRx Signup</title>
+
+  <!-- CSS -->
+
+  <link
+    rel="stylesheet"
+    href="css/signup.css"
+  />
+
+  <!-- FONT AWESOME -->
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+
+</head>
+
 <body>
 
-<h2>Create Account</h2>
+  <!-- BACKGROUND -->
 
-<input id="firstName" placeholder="First Name"><br>
-<input id="lastName" placeholder="Last Name"><br>
-<input id="mobile" placeholder="Mobile"><br>
+  <div class="bg-animation"></div>
 
-<button onclick="sendOTP()">Send OTP</button>
+  <div class="container">
 
-<br><br>
+    <!-- LEFT PANEL -->
 
-<input id="otp" placeholder="Enter OTP"><br>
-<input id="password" type="password" placeholder="Password"><br>
+    <div class="left-panel">
 
-<button onclick="verifyOTP()">Register</button>
+      <img
+        src="images/pulserx-logo.png"
+        class="logo"
+        alt="PulseRx Logo"
+      />
 
-<script>
-async function sendOTP() {
-  const mobile = document.getElementById("mobile").value;
+      <h1>PulseRx 💊</h1>
 
-  const res = await fetch("http://localhost:5000/send-otp", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({ mobile })
-  });
+      <p class="slogan">
 
-  const data = await res.json();
-  alert("OTP: " + data.otp);
-}
+        स्वस्थः जनः समृद्धः राष्ट्रः।<br>
 
-async function verifyOTP() {
-  const data = {
-    firstName: document.getElementById("firstName").value,
-    lastName: document.getElementById("lastName").value,
-    mobile: document.getElementById("mobile").value,
-    otp: document.getElementById("otp").value,
-    password: document.getElementById("password").value
-  };
+        आरोग्यसेवा सर्वेषां अधिकारः।<br>
 
-  const res = await fetch("http://localhost:5000/verify-otp", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify(data)
-  });
+        वयं तत् साधयामः॥
 
-  const result = await res.json();
-  alert(result.message || result.error);
-}
-</script>
+      </p>
+
+    </div>
+
+    <!-- RIGHT PANEL -->
+
+    <div class="right-panel">
+
+      <div class="signup-box">
+
+        <h2>Create Account</h2>
+
+        <p class="sub-text">
+
+          Join PulseRx Platform 🚀
+
+        </p>
+
+        <!-- FORM -->
+
+        <form id="signupForm">
+
+          <!-- NAME -->
+
+          <div class="row">
+
+            <input
+              type="text"
+              id="firstName"
+              placeholder="First Name"
+              required
+            />
+
+            <input
+              type="text"
+              id="lastName"
+              placeholder="Last Name"
+              required
+            />
+
+          </div>
+
+          <!-- AGE -->
+
+          <input
+            type="number"
+            id="age"
+            placeholder="Enter Age"
+            required
+          />
+
+          <!-- MOBILE -->
+
+          <input
+            type="text"
+            id="mobile"
+            placeholder="Enter Mobile Number"
+            maxlength="10"
+            required
+          />
+
+          <!-- OTP -->
+
+          <div class="otp-section">
+
+            <button
+              type="button"
+              id="sendOtpBtn"
+            >
+
+              Send OTP
+
+            </button>
+
+            <span id="otpTimer">
+
+            </span>
+
+          </div>
+
+          <!-- OTP INPUT -->
+
+          <input
+            type="text"
+            id="otp"
+            placeholder="Enter OTP"
+            maxlength="6"
+            required
+          />
+
+          <!-- PASSWORD -->
+
+          <div class="password-box">
+
+            <input
+              type="password"
+              id="password"
+              placeholder="Create Password"
+              required
+            />
+
+            <i
+              class="fa-solid fa-eye"
+              onclick="togglePassword('password')"
+            ></i>
+
+          </div>
+
+          <!-- PASSWORD HINT -->
+
+          <p class="hint">
+
+            Password must contain minimum
+            8 characters 🔐
+
+          </p>
+
+          <!-- CONFIRM PASSWORD -->
+
+          <div class="password-box">
+
+            <input
+              type="password"
+              id="confirmPassword"
+              placeholder="Confirm Password"
+              required
+            />
+
+            <i
+              class="fa-solid fa-eye"
+              onclick="togglePassword('confirmPassword')"
+            ></i>
+
+          </div>
+
+          <!-- BUTTON -->
+
+          <button
+            type="submit"
+            class="signup-btn"
+          >
+
+            Create Account
+
+          </button>
+
+        </form>
+
+        <!-- LOGIN -->
+
+        <p class="login-link">
+
+          Already have account?
+
+          <a href="login.html">
+
+            Login
+
+          </a>
+
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- FIREBASE -->
+
+  <script
+    type="module"
+    src="js/firebase-config.js"
+  ></script>
+
+  <!-- JS -->
+
+  <script src="js/signup.js"></script>
 
 </body>
+
 </html>

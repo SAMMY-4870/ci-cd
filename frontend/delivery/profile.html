@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+
+    Delivery Profile
+
+  </title>
+
+  <!-- CSS -->
+
+  <link
+    rel="stylesheet"
+    href="./css/profile.css"
+  >
+
+  <!-- FONT AWESOME -->
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  >
+
+  <style>
+
+    *{
+
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:
+        Arial,
+        sans-serif;
+    }
+
+    body{
+
+      background:
+        linear-gradient(
+          to right,
+          #0f172a,
+          #1e1b4b
+        );
+
+      color:white;
+      min-height:100vh;
+      padding:40px;
+    }
+
+    .container{
+
+      max-width:1100px;
+      margin:auto;
+    }
+
+    /* =====================================
+       TOP
+    ====================================== */
+
+    .top{
+
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:20px;
+      margin-bottom:30px;
+    }
+
+    .top h1{
+
+      font-size:40px;
+    }
+
+    .status{
+
+      background:#10b981;
+      padding:12px 22px;
+      border-radius:14px;
+      font-weight:600;
+    }
+
+    /* =====================================
+       PROFILE CARD
+    ====================================== */
+
+    .profile-card{
+
+      background:white;
+      color:black;
+      border-radius:30px;
+      padding:35px;
+      box-shadow:
+        0 0 25px rgba(
+          0,
+          0,
+          0,
+          0.2
+        );
+    }
+
+    /* =====================================
+       PROFILE TOP
+    ====================================== */
+
+    .profile-top{
+
+      display:flex;
+      align-items:center;
+      gap:25px;
+      flex-wrap:wrap;
+      margin-bottom:35px;
+    }
+
+    .profile-top img{
+
+      width:120px;
+      height:120px;
+      border-radius:50%;
+      object-fit:cover;
+      border:5px solid #4ade80;
+    }
+
+    .profile-info h2{
+
+      font-size:32px;
+    }
+
+    .profile-info p{
+
+      margin-top:8px;
+      color:gray;
+    }
+
+    /* =====================================
+       GRID
+    ====================================== */
+
+    .grid{
+
+      display:grid;
+      grid-template-columns:
+        repeat(
+          auto-fit,
+          minmax(
+            300px,
+            1fr
+          )
+        );
+
+      gap:25px;
+      margin-top:20px;
+    }
+
+    .box{
+
+      background:#f8fafc;
+      padding:25px;
+      border-radius:20px;
+      border:1px solid #e2e8f0;
+    }
+
+    .box h3{
+
+      margin-bottom:20px;
+      color:#2563eb;
+    }
+
+    .field{
+
+      margin-bottom:18px;
+    }
+
+    .field label{
+
+      display:block;
+      margin-bottom:8px;
+      font-weight:600;
+      color:#334155;
+    }
+
+    .field input{
+
+      width:100%;
+      padding:14px;
+      border:none;
+      outline:none;
+      border-radius:14px;
+      background:#e2e8f0;
+      font-size:15px;
+    }
+
+    /* =====================================
+       BUTTON
+    ====================================== */
+
+    .btn{
+
+      margin-top:25px;
+      padding:16px 28px;
+      border:none;
+      border-radius:16px;
+      background:
+        linear-gradient(
+          to right,
+          #2563eb,
+          #7c3aed
+        );
+
+      color:white;
+      font-size:16px;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .btn:hover{
+
+      transform:scale(1.05);
+    }
+
+    /* =====================================
+       LEGAL
+    ====================================== */
+
+    .legal{
+
+      margin-top:35px;
+      background:#f8fafc;
+      padding:25px;
+      border-radius:20px;
+      border-left:6px solid #2563eb;
+    }
+
+    .legal h3{
+
+      color:#2563eb;
+      margin-bottom:15px;
+    }
+
+    .legal ul{
+
+      padding-left:20px;
+      line-height:2;
+      color:#475569;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- =====================================
+       TOP
+  ====================================== -->
+
+  <div class="top">
+
+    <h1>
+
+      👤 Delivery Profile
+
+    </h1>
+
+    <div class="status">
+
+      🟢 Verified Partner
+
+    </div>
+
+  </div>
+
+  <!-- =====================================
+       PROFILE CARD
+  ====================================== -->
+
+  <div class="profile-card">
+
+    <!-- PROFILE TOP -->
+
+    <div class="profile-top">
+
+      <!-- IMAGE -->
+
+      <img
+
+        src="./images/delivery-boy.png"
+
+        alt="Delivery Boy"
+      >
+
+      <!-- INFO -->
+
+      <div class="profile-info">
+
+        <h2>
+
+          Rahul Sharma
+
+        </h2>
+
+        <p>
+
+          🚚 Senior Delivery Partner
+
+        </p>
+
+        <p>
+
+          ⭐ Rating:
+          4.9 / 5
+
+        </p>
+
+      </div>
+
+    </div>
+
+    <!-- =====================================
+         GRID
+    ====================================== -->
+
+    <div class="grid">
+
+      <!-- PERSONAL -->
+
+      <div class="box">
+
+        <h3>
+
+          👤 Personal Details
+
+        </h3>
+
+        <div class="field">
+
+          <label>
+
+            Full Name
+
+          </label>
+
+          <input
+            type="text"
+            value="Rahul Sharma"
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label>
+
+            Mobile Number
+
+          </label>
+
+          <input
+            type="text"
+            value="9876543210"
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label>
+
+            Email Address
+
+          </label>
+
+          <input
+            type="email"
+            value="rahul@gmail.com"
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label>
+
+            Full Address
+
+          </label>
+
+          <input
+            type="text"
+            value="
+              Ahmednagar,
+              Maharashtra
+            "
+          >
+
+        </div>
+
+      </div>
+
+      <!-- DOCUMENT -->
+
+      <div class="box">
+
+        <h3>
+
+          🪪 Verification Details
+
+        </h3>
+
+        <div class="field">
+
+          <label>
+
+            Aadhaar Number
+
+          </label>
+
+          <input
+            type="text"
+            maxlength="12"
+            value="123456789012"
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label>
+
+            PAN Number
+
+          </label>
+
+          <input
+            type="text"
+            value="ABCDE1234F"
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label>
+
+            Driving License
+
+          </label>
+
+          <input
+            type="text"
+            value="MH1420230012345"
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label>
+
+            Bike Number
+
+          </label>
+
+          <input
+            type="text"
+            value="MH16AB1234"
+          >
+
+        </div>
+
+      </div>
+
+      <!-- SECURITY -->
+
+      <div class="box">
+
+        <h3>
+
+          🔐 Security Settings
+
+        </h3>
+
+        <div class="field">
+
+          <label>
+
+            Current Password
+
+          </label>
+
+          <input
+            type="password"
+            placeholder="••••••••"
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label>
+
+            New Password
+
+          </label>
+
+          <input
+            type="password"
+            placeholder="••••••••"
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label>
+
+            Confirm Password
+
+          </label>
+
+          <input
+            type="password"
+            placeholder="••••••••"
+          >
+
+        </div>
+
+      </div>
+
+      <!-- BANK -->
+
+      <div class="box">
+
+        <h3>
+
+          💳 Bank Details
+
+        </h3>
+
+        <div class="field">
+
+          <label>
+
+            Account Holder Name
+
+          </label>
+
+          <input
+            type="text"
+            value="Rahul Sharma"
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label>
+
+            Bank Name
+
+          </label>
+
+          <input
+            type="text"
+            value="State Bank Of India"
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label>
+
+            Account Number
+
+          </label>
+
+          <input
+            type="text"
+            value="12345678901"
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label>
+
+            IFSC Code
+
+          </label>
+
+          <input
+            type="text"
+            value="SBIN0001234"
+          >
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- SAVE -->
+
+    <button class="btn">
+
+      💾 Save Profile
+
+    </button>
+
+    <!-- =====================================
+         LEGAL
+    ====================================== -->
+
+    <div class="legal">
+
+      <h3>
+
+        ⚖️ Required Legal Information
+
+      </h3>
+
+      <ul>
+
+        <li>
+
+          Aadhaar Card
+          (12 Digit Valid ID)
+
+        </li>
+
+        <li>
+
+          Valid Driving License
+
+        </li>
+
+        <li>
+
+          Bike Registration Number
+
+        </li>
+
+        <li>
+
+          Active Mobile Number
+
+        </li>
+
+        <li>
+
+          PAN Card For Payments
+
+        </li>
+
+        <li>
+
+          Bank Details For Salary
+
+        </li>
+
+        <li>
+
+          Emergency Contact Number
+
+        </li>
+
+        <li>
+
+          Delivery Partner Agreement
+
+        </li>
+
+        <li>
+
+          Helmet & Safety Compliance
+
+        </li>
+
+      </ul>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- JS -->
+
+<script src="./js/profile.js"></script>
+
+</body>
+</html>

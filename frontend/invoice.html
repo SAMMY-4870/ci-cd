@@ -1,147 +1,274 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-  <title>Invoice</title>
 
-  <style>
-    body{
-      font-family:Arial;
-      background:#f5f5f5;
-      padding:30px;
-    }
+  <meta charset="UTF-8">
 
-    .invoice{
-      background:white;
-      max-width:800px;
-      margin:auto;
-      padding:30px;
-      border-radius:15px;
-      box-shadow:0 0 10px rgba(0,0,0,0.1);
-    }
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-    .top{
-      display:flex;
-      justify-content:space-between;
-      margin-bottom:30px;
-    }
+  <title>PulseRx GST Invoice</title>
 
-    h1{
-      color:#007bff;
-    }
+  <link
+    rel="stylesheet"
+    href="css/invoice.css"
+  >
 
-    table{
-      width:100%;
-      border-collapse:collapse;
-      margin-top:20px;
-    }
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js">
+  </script>
 
-    table th, table td{
-      border:1px solid #ddd;
-      padding:12px;
-      text-align:left;
-    }
-
-    .total{
-      text-align:right;
-      margin-top:20px;
-      font-size:22px;
-      font-weight:bold;
-    }
-
-    button{
-      margin-top:20px;
-      padding:12px 20px;
-      border:none;
-      background:#007bff;
-      color:white;
-      border-radius:10px;
-      cursor:pointer;
-    }
-  </style>
 </head>
 
 <body>
 
-<div class="invoice">
+<div class="container">
 
-  <div class="top">
-    <div>
-      <h1>CloudShip 🚀</h1>
-      <p>Medical Delivery Service</p>
+  <!-- INVOICE -->
+
+  <div
+    class="invoice"
+    id="invoice"
+  >
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+      <div>
+
+        <h1>
+
+          💊 PulseRx Pharma
+
+        </h1>
+
+        <p>
+
+          Smart Medicine Delivery
+
+        </p>
+
+        <p>
+
+          Ahmednagar Maharashtra
+
+        </p>
+
+        <p>
+
+          GSTIN:
+          27ABCDE1234F1Z5
+
+        </p>
+
+      </div>
+
+      <div class="right">
+
+        <h2>
+
+          GST TAX INVOICE
+
+        </h2>
+
+        <p>
+
+          Invoice ID:
+          <span id="invoiceId">
+
+          </span>
+
+        </p>
+
+        <p id="date">
+
+        </p>
+
+      </div>
+
     </div>
 
-    <div>
-      <h3>Invoice</h3>
-      <p id="date"></p>
+    <!-- CUSTOMER -->
+
+    <div class="customer">
+
+      <div>
+
+        <h3>
+
+          Patient Details
+
+        </h3>
+
+        <p>
+
+          Name:
+          Samarth Gayake
+
+        </p>
+
+        <p>
+
+          Mobile:
+          +91 8530104870
+
+        </p>
+
+        <p>
+
+          Address:
+          Ahmednagar Maharashtra
+
+        </p>
+
+      </div>
+
+      <div>
+
+        <h3>
+
+          Doctor
+
+        </h3>
+
+        <p>
+
+          Dr. Kadam
+
+        </p>
+
+        <p>
+
+          Heart Specialist
+
+        </p>
+
+      </div>
+
     </div>
+
+    <!-- TABLE -->
+
+    <table>
+
+      <thead>
+
+        <tr>
+
+          <th>Sr</th>
+
+          <th>Medicine</th>
+
+          <th>Batch</th>
+
+          <th>Exp</th>
+
+          <th>Qty</th>
+
+          <th>MRP</th>
+
+          <th>GST</th>
+
+          <th>Total</th>
+
+        </tr>
+
+      </thead>
+
+      <tbody id="tableBody">
+
+      </tbody>
+
+    </table>
+
+    <!-- TOTAL -->
+
+    <div class="summary">
+
+      <div>
+
+        Gross:
+        ₹<span id="gross">
+
+        </span>
+
+      </div>
+
+      <div>
+
+        Discount:
+        ₹<span id="discount">
+
+        </span>
+
+      </div>
+
+      <div>
+
+        GST:
+        ₹<span id="gst">
+
+        </span>
+
+      </div>
+
+      <div class="net">
+
+        Net Amount:
+        ₹<span id="net">
+
+        </span>
+
+      </div>
+
+    </div>
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+
+      <p>
+
+        स्वस्थः जनः समृद्धः राष्ट्रः।
+
+      </p>
+
+      <p>
+
+        Get Well Soon ❤️
+
+      </p>
+
+    </div>
+
   </div>
 
-  <hr>
+  <!-- BUTTON -->
 
-  <h3>Customer Details</h3>
+  <button
+    class="download"
+    onclick="downloadInvoice()"
+  >
 
-  <p><b>Name:</b> <span id="name"></span></p>
-  <p><b>Mobile:</b> <span id="mobile"></span></p>
-  <p><b>Address:</b> <span id="address"></span></p>
+    Download Invoice PDF
 
-  <table>
-    <thead>
-      <tr>
-        <th>Medicine</th>
-        <th>Qty</th>
-        <th>Price</th>
-        <th>Tax</th>
-        <th>Total</th>
-      </tr>
-    </thead>
+  </button>
+  <button
+  class="whatsapp-btn"
+  onclick="sendWhatsApp()"
+  >
 
-    <tbody>
-      <tr>
-        <td id="medicine"></td>
-        <td id="quantity"></td>
-        <td id="price"></td>
-        <td id="tax"></td>
-        <td id="grand"></td>
-      </tr>
-    </tbody>
-  </table>
+  Send On WhatsApp
 
-  <div class="total">
-    Grand Total: ₹<span id="total"></span>
-  </div>
-
-  <button onclick="window.print()">
-    Print Invoice
   </button>
 
 </div>
 
-<script>
-
-const order = JSON.parse(localStorage.getItem("invoice"));
-
-document.getElementById("name").innerText = order.name;
-document.getElementById("mobile").innerText = order.mobile;
-document.getElementById("address").innerText = order.address;
-
-document.getElementById("medicine").innerText = order.medicine;
-document.getElementById("quantity").innerText = order.quantity;
-
-document.getElementById("price").innerText = "₹" + order.price;
-
-document.getElementById("tax").innerText =
-  "₹" + order.tax.toFixed(2);
-
-document.getElementById("grand").innerText =
-  "₹" + order.total.toFixed(2);
-
-document.getElementById("total").innerText =
-  order.total.toFixed(2);
-
-document.getElementById("date").innerText =
-  new Date().toLocaleString();
-
-</script>
+<script src="js/invoice.js"></script>
 
 </body>
 </html>

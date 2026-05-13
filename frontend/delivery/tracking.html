@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+
+    Live Tracking
+
+  </title>
+
+  <!-- FONT AWESOME -->
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  >
+
+  <style>
+
+    *{
+
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:
+        Arial,
+        sans-serif;
+    }
+
+    body{
+
+      background:
+        linear-gradient(
+          to right,
+          #0f172a,
+          #1e1b4b
+        );
+
+      color:white;
+      min-height:100vh;
+      padding:30px;
+    }
+
+    /* =====================================
+       HEADER
+    ====================================== */
+
+    .top{
+
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:20px;
+      margin-bottom:30px;
+    }
+
+    .title{
+
+      display:flex;
+      align-items:center;
+      gap:15px;
+    }
+
+    .title h1{
+
+      font-size:38px;
+    }
+
+    /* =====================================
+       TRACKING BOX
+    ====================================== */
+
+    .tracking-box{
+
+      background:white;
+      border-radius:30px;
+      padding:30px;
+      color:black;
+      box-shadow:
+        0 0 30px rgba(
+          0,
+          0,
+          0,
+          0.2
+        );
+    }
+
+    /* =====================================
+       MAP
+    ====================================== */
+
+    .map{
+
+      width:100%;
+      height:500px;
+      border-radius:25px;
+      overflow:hidden;
+      margin-top:20px;
+    }
+
+    iframe{
+
+      width:100%;
+      height:100%;
+      border:none;
+    }
+
+    /* =====================================
+       INFO CARDS
+    ====================================== */
+
+    .info-grid{
+
+      display:grid;
+      grid-template-columns:
+        repeat(
+          auto-fit,
+          minmax(
+            250px,
+            1fr
+          )
+        );
+
+      gap:20px;
+      margin-top:30px;
+    }
+
+    .card{
+
+      background:
+        linear-gradient(
+          to right,
+          #2563eb,
+          #7c3aed
+        );
+
+      color:white;
+      padding:25px;
+      border-radius:20px;
+    }
+
+    .card h2{
+
+      margin-top:15px;
+      font-size:30px;
+    }
+
+    .card p{
+
+      margin-top:10px;
+      opacity:0.9;
+    }
+
+    /* =====================================
+       STATUS BAR
+    ====================================== */
+
+    .progress-box{
+
+      margin-top:35px;
+    }
+
+    .progress-top{
+
+      display:flex;
+      justify-content:space-between;
+      margin-bottom:12px;
+      font-weight:600;
+    }
+
+    .progress{
+
+      width:100%;
+      height:18px;
+      background:#e2e8f0;
+      border-radius:20px;
+      overflow:hidden;
+    }
+
+    .progress-bar{
+
+      width:75%;
+      height:100%;
+      background:
+        linear-gradient(
+          to right,
+          #10b981,
+          #2563eb
+        );
+
+      animation:
+        move 2s infinite alternate;
+    }
+
+    @keyframes move{
+
+      from{
+
+        width:65%;
+      }
+
+      to{
+
+        width:80%;
+      }
+    }
+
+    /* =====================================
+       BUTTONS
+    ====================================== */
+
+    .actions{
+
+      display:flex;
+      gap:20px;
+      margin-top:35px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+
+      padding:16px 28px;
+      border:none;
+      border-radius:16px;
+      color:white;
+      font-size:16px;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .btn:hover{
+
+      transform:scale(1.05);
+    }
+
+    .primary{
+
+      background:
+        linear-gradient(
+          to right,
+          #2563eb,
+          #7c3aed
+        );
+    }
+
+    .danger{
+
+      background:
+        linear-gradient(
+          to right,
+          #ef4444,
+          #dc2626
+        );
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<!-- =====================================
+     TOP
+====================================== -->
+
+<div class="top">
+
+  <div class="title">
+
+    <i
+      class="fa-solid fa-location-dot"
+      style="
+        font-size:45px;
+        color:#f43f5e;
+      "
+    ></i>
+
+    <h1>
+
+      Live Tracking
+
+    </h1>
+
+  </div>
+
+  <!-- STATUS -->
+
+  <div style="
+    background:#10b981;
+    padding:12px 22px;
+    border-radius:15px;
+    font-weight:600;
+  ">
+
+    🟢 Delivery Active
+
+  </div>
+
+</div>
+
+<!-- =====================================
+     TRACKING BOX
+====================================== -->
+
+<div class="tracking-box">
+
+  <!-- ORDER INFO -->
+
+  <h2>
+
+    🚚 Order #ORD-1001
+
+  </h2>
+
+  <p style="
+    margin-top:10px;
+    color:gray;
+  ">
+
+    Delivery Route:
+    Ahmednagar →
+    Pune
+
+  </p>
+
+  <!-- =====================================
+       MAP
+  ====================================== -->
+
+  <div class="map">
+
+    <iframe
+
+      src="
+https://maps.google.com/maps?q=18.5204,73.8567&z=12&output=embed
+      "
+
+      allowfullscreen
+
+      loading="lazy"
+
+    ></iframe>
+
+  </div>
+
+  <!-- =====================================
+       INFO CARDS
+  ====================================== -->
+
+  <div class="info-grid">
+
+    <!-- DRIVER -->
+
+    <div class="card">
+
+      <i
+        class="fa-solid fa-user"
+        style="
+          font-size:35px;
+        "
+      ></i>
+
+      <h2>
+
+        Rahul
+
+      </h2>
+
+      <p>
+
+        Delivery Partner
+
+      </p>
+
+    </div>
+
+    <!-- ETA -->
+
+    <div class="card">
+
+      <i
+        class="fa-solid fa-clock"
+        style="
+          font-size:35px;
+        "
+      ></i>
+
+      <h2>
+
+        18 Min
+
+      </h2>
+
+      <p>
+
+        Estimated Arrival
+
+      </p>
+
+    </div>
+
+    <!-- STATUS -->
+
+    <div class="card">
+
+      <i
+        class="fa-solid fa-truck"
+        style="
+          font-size:35px;
+        "
+      ></i>
+
+      <h2>
+
+        On The Way
+
+      </h2>
+
+      <p>
+
+        Delivery In Progress
+
+      </p>
+
+    </div>
+
+  </div>
+
+  <!-- =====================================
+       DELIVERY STATUS
+  ====================================== -->
+
+  <div class="progress-box">
+
+    <div class="progress-top">
+
+      <span>
+
+        📦 Order Progress
+
+      </span>
+
+      <span>
+
+        75%
+
+      </span>
+
+    </div>
+
+    <div class="progress">
+
+      <div class="progress-bar"></div>
+
+    </div>
+
+  </div>
+
+  <!-- =====================================
+       ACTIONS
+  ====================================== -->
+
+  <div class="actions">
+
+    <!-- CALL -->
+
+    <button
+      class="btn primary"
+    >
+
+      📞 Call Customer
+
+    </button>
+
+    <!-- NAVIGATION -->
+
+    <button
+      class="btn primary"
+    >
+
+      📍 Open Navigation
+
+    </button>
+
+    <!-- COMPLETE -->
+
+    <button
+      class="btn danger"
+    >
+
+      ✅ Mark Delivered
+
+    </button>
+
+  </div>
+
+</div>
+
+</body>
+</html>

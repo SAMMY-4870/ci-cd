@@ -1,0 +1,61 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial;
+}
+
+body{
+
+  background:#f8fafc;
+
+  padding:30px;
+}
+
+.container{
+
+  max-width:1000px;
+
+  margin:auto;
+}
+
+.order-card{
+
+  background:white;
+
+  padding:25px;
+
+  border-radius:20px;
+
+  margin-top:20px;
+
+  box-shadow:
+    0 0 10px rgba(0,0,0,0.1);
+}
+
+.order-card h2{
+
+  margin-bottom:15px;
+}
+
+.order-card p{
+
+  margin:10px 0;
+}
+
+.order-card button{
+
+  margin-top:20px;
+
+  padding:12px 20px;
+
+  border:none;
+
+  background:#2563eb;
+
+  color:white;
+
+  border-radius:10px;
+
+  cursor:pointer;
+}

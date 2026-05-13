@@ -10,6 +10,23 @@ const db = require("./firebase");
 const app = express();
 
 // ======================================
+// OCR PACKAGES
+// ======================================
+
+const multer =
+
+  require("multer");
+
+const Tesseract =
+
+  require("tesseract.js");
+
+
+
+const fs =
+
+  require("fs");
+// ======================================
 // CONFIG
 // ======================================
 
@@ -32,6 +49,53 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(express.json());
+
+app.use(cors());
+
+// ======================================
+// UPLOAD STORAGE
+// ======================================
+
+const storage =
+
+  multer.diskStorage({
+
+    destination:
+      function(req,file,cb){
+
+        cb(
+          null,
+          "uploads/"
+        );
+      },
+
+    filename:
+      function(req,file,cb){
+
+        cb(
+
+          null,
+
+          Date.now() +
+
+          path.extname(
+            file.originalname
+          )
+        );
+      }
+  });
+
+// ======================================
+// MULTER
+// ======================================
+
+const upload =
+
+  multer({
+
+    storage
+  });
 // ======================================
 // FRONTEND STATIC FILES
 // ======================================
@@ -135,107 +199,241 @@ app.post("/send-otp", (req, res) => {
 
 // ======================================
 // REGISTER
+/// ======================================
+// REGISTER USER
 // ======================================
 
-app.post("/verify-otp", async (req, res) => {
+app.post(
+  "/verify-otp",
+  async (req, res) => {
 
-  try {
+    try {
 
-    const {
+      const {
 
-      firstName,
-      lastName,
-      mobile,
-      otp,
-      password
+        firstName,
+        lastName,
+        age,
+        mobile,
+        password
 
-    } = req.body;
+      } = req.body;
 
-    if (
-      !firstName ||
-      !mobile ||
-      !otp ||
-      !password
-    ) {
+      // VALIDATION
 
-      return res.status(400).json({
+      if (
+
+        !firstName ||
+        !lastName ||
+        !age ||
+        !mobile ||
+        !password
+
+      ) {
+
+        return res.status(400).json({
+
+          success: false,
+
+          error:
+            "All fields required ❌"
+        });
+      }
+
+      // CHECK EXISTING USER
+
+      const existingUser =
+
+        await db.collection("users")
+        .where(
+          "mobile",
+          "==",
+          mobile
+        )
+        .get();
+
+      if (!existingUser.empty) {
+
+        return res.status(400).json({
+
+          success: false,
+
+          error:
+            "User already exists ❌"
+        });
+      }
+
+      // HASH PASSWORD
+
+      const hashedPassword =
+
+        await bcrypt.hash(
+          password,
+          10
+        );
+
+      // SAVE USER
+
+      const userRef =
+
+        await db.collection("users")
+        .add({
+
+          firstName,
+          lastName,
+          age,
+          mobile,
+
+          password:
+            hashedPassword,
+
+          role: "user",
+
+          createdAt:
+            new Date()
+        });
+
+      // JWT TOKEN
+
+      const token = jwt.sign(
+
+        {
+
+          id: userRef.id,
+
+          mobile
+
+        },
+
+        SECRET,
+
+        {
+
+          expiresIn: "7d"
+        }
+      );
+
+      // RESPONSE
+
+      res.json({
+
+        success: true,
+
+        message:
+          "Registration successful ✅",
+
+        token
+      });
+
+    } catch (err) {
+
+      console.error(
+        "REGISTER ERROR:",
+        err
+      );
+
+      res.status(500).json({
 
         success: false,
 
         error:
-          "All fields required ❌"
+          "Registration failed ❌"
       });
     }
-
-    if (otpStore[mobile] != otp) {
-
-      return res.status(400).json({
-
-        success: false,
-
-        error:
-          "Invalid OTP ❌"
-      });
-    }
-
-    const existing =
-      await db.collection("users")
-      .where("mobile", "==", mobile)
-      .get();
-
-    if (!existing.empty) {
-
-      return res.status(400).json({
-
-        success: false,
-
-        error:
-          "User already exists ❌"
-      });
-    }
-
-    const hash =
-      await bcrypt.hash(password, 10);
-
-    await db.collection("users").add({
-
-      firstName,
-      lastName,
-      mobile,
-
-      password: hash,
-
-      role: "user",
-
-      createdAt: new Date()
-    });
-
-    delete otpStore[mobile];
-
-    res.json({
-
-      success: true,
-
-      message:
-        "Registration successful ✅"
-    });
-
-  } catch (err) {
-
-    console.error(
-      "REGISTER ERROR:",
-      err
-    );
-
-    res.status(500).json({
-
-      success: false,
-
-      error:
-        "Registration failed ❌"
-    });
   }
-});
+);
+// ======================================
+// PLACE ORDER
+// ======================================
+
+app.post(
+  "/order",
+  async (req, res) => {
+
+    try {
+
+      const {
+
+        name,
+        mobile,
+        address,
+        medicine,
+        quantity
+
+      } = req.body;
+
+      // VALIDATION
+
+      if (
+
+        !name ||
+        !mobile ||
+        !address ||
+        !medicine ||
+        !quantity
+
+      ) {
+
+        return res.status(400).json({
+
+          success: false,
+
+          error:
+            "All fields required ❌"
+        });
+      }
+
+      // SAVE ORDER
+
+      const orderRef =
+
+        await db.collection("orders")
+        .add({
+
+          name,
+          mobile,
+          address,
+          medicine,
+          quantity,
+
+          status:
+            "Pending",
+
+          createdAt:
+            new Date()
+              .toLocaleString()
+        });
+
+      // RESPONSE
+
+      res.json({
+
+        success: true,
+
+        message:
+          "Order placed successfully ✅",
+
+        orderId:
+          orderRef.id
+      });
+
+    } catch (error) {
+
+      console.error(
+        "ORDER ERROR:",
+        error
+      );
+
+      res.status(500).json({
+
+        success: false,
+
+        error:
+          "Order failed ❌"
+      });
+    }
+  }
+);
 
 // ======================================
 // LOGIN
@@ -246,6 +444,8 @@ app.post("/login", async (req, res) => {
   try {
 
     const { mobile, password } = req.body;
+
+    // VALIDATION
 
     if (!mobile || !password) {
 
@@ -258,10 +458,17 @@ app.post("/login", async (req, res) => {
       });
     }
 
+    // FIND USER
+
     const snapshot =
+
       await db.collection("users")
+
       .where("mobile", "==", mobile)
+
       .get();
+
+    // USER NOT FOUND
 
     if (snapshot.empty) {
 
@@ -274,14 +481,24 @@ app.post("/login", async (req, res) => {
       });
     }
 
+    // USER DATA
+
     const user =
+
       snapshot.docs[0].data();
 
+    // PASSWORD CHECK
+
     const match =
+
       await bcrypt.compare(
+
         password,
+
         user.password
       );
+
+    // WRONG PASSWORD
 
     if (!match) {
 
@@ -294,20 +511,31 @@ app.post("/login", async (req, res) => {
       });
     }
 
+    // JWT TOKEN
+
     const token =
+
       jwt.sign(
 
         {
-          mobile: user.mobile,
-          role: user.role
+
+          mobile:
+            user.mobile,
+
+          role:
+            user.role
         },
 
         SECRET,
 
         {
-          expiresIn: "2h"
+
+          expiresIn:
+            "2h"
         }
       );
+
+    // SUCCESS RESPONSE
 
     res.json({
 
@@ -316,13 +544,39 @@ app.post("/login", async (req, res) => {
       message:
         "Login successful ✅",
 
-      token
+      token,
+
+      // SEND ROLE
+
+      role:
+        user.role ||
+
+        "user",
+
+      // SEND MOBILE
+
+      mobile:
+        user.mobile,
+
+      // OPTIONAL
+
+      firstName:
+        user.firstName ||
+
+        "",
+
+      lastName:
+        user.lastName ||
+
+        ""
     });
 
   } catch (err) {
 
     console.error(
+
       "LOGIN ERROR:",
+
       err
     );
 
@@ -513,59 +767,93 @@ app.post("/order", auth, async (req, res) => {
 // GET ORDERS
 // ======================================
 
-app.get("/orders", async (req, res) => {
+app.get(
+  "/orders",
+  async (req, res) => {
 
-  try {
+    try {
 
-    const snapshot =
-      await db.collection("orders")
-      .orderBy("createdAt", "desc")
-      .get();
+      const snapshot =
 
-    const orders =
-      snapshot.docs.map(doc => {
+        await db
+        .collection("orders")
+        .orderBy(
+          "createdAt",
+          "desc"
+        )
+        .get();
 
-        const data =
-          doc.data();
+      const orders =
 
-        return {
+        snapshot.docs.map(doc => {
 
-          id: doc.id,
+          const data =
+            doc.data();
 
-          ...data,
+          // DATE FIX
 
-          createdAt:
-            data.createdAt
-            ?.toDate()
-            ?.toLocaleString()
-        };
+          let formattedDate =
+            "-";
+
+          if (
+
+            data.createdAt &&
+            typeof data.createdAt.toDate
+            === "function"
+
+          ) {
+
+            formattedDate =
+
+              data.createdAt
+              .toDate()
+              .toLocaleString();
+
+          } else {
+
+            formattedDate =
+              data.createdAt || "-";
+          }
+
+          return {
+
+            id: doc.id,
+
+            ...data,
+
+            createdAt:
+              formattedDate
+          };
+        });
+
+      res.json({
+
+        success: true,
+
+        total:
+          orders.length,
+
+        data:
+          orders
       });
 
-    res.json({
+    } catch (err) {
 
-      success: true,
+      console.error(
+        "GET ERROR:",
+        err
+      );
 
-      total: orders.length,
+      res.status(500).json({
 
-      data: orders
-    });
+        success: false,
 
-  } catch (err) {
-
-    console.error(
-      "GET ERROR:",
-      err
-    );
-
-    res.status(500).json({
-
-      success: false,
-
-      error:
-        "Fetch failed ❌"
-    });
+        error:
+          "Fetch failed ❌"
+      });
+    }
   }
-});
+);
 
 // ======================================
 // UPDATE ORDER STATUS
@@ -719,3 +1007,115 @@ app.listen(PORT, "0.0.0.0", () => {
 
   `);
 });
+// ======================================
+// OCR PRESCRIPTION API
+// ======================================
+
+app.post(
+
+  "/ocr",
+
+  upload.single("image"),
+
+  async(req,res)=>{
+
+    try{
+
+      // IMAGE PATH
+
+      const imagePath =
+
+        req.file.path;
+
+      // OCR
+
+      const result =
+
+        await Tesseract.recognize(
+
+          imagePath,
+
+          "eng"
+        );
+
+      // TEXT
+
+      const text =
+
+        result.data.text;
+
+      // MEDICINE LIST
+
+      const medicines = [
+
+        "Paracetamol",
+
+        "Dolo",
+
+        "Crocin",
+
+        "Azithromycin",
+
+        "Ibuprofen",
+
+        "Cetirizine",
+
+        "Amoxicillin"
+      ];
+
+      // DETECTED
+
+      let detected = [];
+
+      medicines.forEach(med=>{
+
+        if(
+
+          text
+          .toLowerCase()
+
+          .includes(
+
+            med.toLowerCase()
+          )
+        ){
+
+          detected.push(med);
+        }
+      });
+
+      // DELETE IMAGE
+
+      fs.unlinkSync(
+        imagePath
+      );
+
+      // RESPONSE
+
+      res.json({
+
+        success:true,
+
+        extractedText:text,
+
+        detectedMedicines:
+          detected
+      });
+
+    }catch(error){
+
+      console.error(
+        "OCR ERROR:",
+        error
+      );
+
+      res.status(500).json({
+
+        success:false,
+
+        error:
+          "OCR Failed ❌"
+      });
+    }
+  }
+);

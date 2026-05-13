@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>PulseRx Orders</title>
+
+  <!-- CSS -->
+
+  <link
+    rel="stylesheet"
+    href="css/orders.css"
+  />
+
+  <!-- FONT AWESOME -->
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+      <h2>
+
+        💊 PulseRx
+
+      </h2>
+
+      <a href="dashboard.html">
+
+        <i class="fa-solid fa-house"></i>
+
+        Dashboard
+
+      </a>
+
+      <a
+        href="orders.html"
+        class="active"
+      >
+
+        <i class="fa-solid fa-bag-shopping"></i>
+
+        My Orders
+
+      </a>
+
+      <a href="tracking.html">
+
+        <i class="fa-solid fa-truck"></i>
+
+        Tracking
+
+      </a>
+
+      <a href="scanner.html">
+
+        <i class="fa-solid fa-robot"></i>
+
+        AI Scanner
+
+      </a>
+
+      <button
+        class="logout"
+        onclick="logout()"
+      >
+
+        Logout
+
+      </button>
+
+    </div>
+
+    <!-- MAIN -->
+
+    <div class="main">
+
+      <!-- TOP -->
+
+      <div class="topbar">
+
+        <div>
+
+          <h1>
+
+            📦 My Orders
+
+          </h1>
+
+          <p>
+
+            View Your Recent Orders
+
+          </p>
+
+        </div>
+
+        <input
+          type="text"
+          id="search"
+          placeholder="Search medicine..."
+        />
+
+      </div>
+
+      <!-- STATS -->
+
+      <div class="stats">
+
+        <div class="card">
+
+          <h2 id="totalOrders">
+
+            0
+
+          </h2>
+
+          <p>
+
+            Total Orders
+
+          </p>
+
+        </div>
+
+        <div class="card">
+
+          <h2 id="pendingOrders">
+
+            0
+
+          </h2>
+
+          <p>
+
+            Pending
+
+          </p>
+
+        </div>
+
+        <div class="card">
+
+          <h2 id="deliveredOrders">
+
+            0
+
+          </h2>
+
+          <p>
+
+            Delivered
+
+          </p>
+
+        </div>
+
+      </div>
+
+      <!-- ORDERS -->
+
+      <div
+        class="orders"
+        id="ordersContainer"
+      >
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- JS -->
+
+  <script src="js/orders.js"></script>
+
+</body>
+
+</html>

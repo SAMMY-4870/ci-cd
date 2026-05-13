@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+
+    Delivery Dashboard
+
+  </title>
+
+  <!-- CSS -->
+
+  <link
+    rel="stylesheet"
+    href="./css/dashboard.css"
+  >
+
+  <!-- FONT AWESOME -->
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  >
+
+</head>
+
+<body>
+
+<!-- =====================================
+     SIDEBAR
+====================================== -->
+
+<div class="sidebar">
+
+  <!-- PROFILE -->
+
+  <div style="
+    text-align:center;
+    margin-bottom:40px;
+  ">
+
+    <!-- DELIVERY BOY IMAGE -->
+
+    <img
+
+      src="./images/delivery-boy.png"
+
+      alt="Delivery Boy"
+
+      style="
+        width:100px;
+        height:100px;
+        border-radius:50%;
+        object-fit:cover;
+        border:4px solid #4ade80;
+        box-shadow:
+          0 0 25px rgba(
+            74,
+            222,
+            128,
+            0.4
+          );
+      "
+    />
+
+    <!-- LOGO -->
+
+    <img
+
+      src="./images/logo.png"
+
+      alt="Logo"
+
+      style="
+        width:65px;
+        margin-top:15px;
+      "
+    />
+
+    <h2 style="
+      margin-top:15px;
+    ">
+
+      🚚 PulseRx
+
+    </h2>
+
+    <p style="
+      color:#94a3b8;
+      margin-top:5px;
+      font-size:14px;
+    ">
+
+      Delivery Partner
+
+    </p>
+
+  </div>
+
+  <!-- MENU -->
+
+  <a href="dashboard.html">
+
+    <i class="fa-solid fa-house"></i>
+
+    Dashboard
+
+  </a>
+
+  <a href="orders.html">
+
+    <i class="fa-solid fa-box"></i>
+
+    Orders
+
+  </a>
+
+  <a href="tracking.html">
+
+    <i class="fa-solid fa-location-dot"></i>
+
+    Tracking
+
+  </a>
+
+  <a href="earnings.html">
+
+    <i class="fa-solid fa-wallet"></i>
+
+    Earnings
+
+  </a>
+
+  <a href="profile.html">
+
+    <i class="fa-solid fa-user"></i>
+
+    Profile
+
+  </a>
+
+</div>
+
+<!-- =====================================
+     MAIN
+====================================== -->
+
+<div class="main">
+
+  <!-- TOPBAR -->
+
+  <div style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:20px;
+  ">
+
+    <div>
+
+      <h1>
+
+        Welcome Delivery Partner 👋
+
+      </h1>
+
+      <p style="
+        color:gray;
+        margin-top:10px;
+      ">
+
+        Fast & Secure Medicine Delivery 🚀
+
+      </p>
+
+    </div>
+
+    <!-- ONLINE STATUS -->
+
+    <div style="
+      background:#10b981;
+      color:white;
+      padding:12px 22px;
+      border-radius:15px;
+      font-weight:600;
+      box-shadow:
+        0 0 20px rgba(
+          16,
+          185,
+          129,
+          0.3
+        );
+    ">
+
+      🟢 Online
+
+    </div>
+
+  </div>
+
+  <!-- =====================================
+       HERO SECTION
+  ====================================== -->
+
+  <div style="
+    margin-top:30px;
+    background:white;
+    border-radius:25px;
+    padding:30px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:30px;
+  ">
+
+    <!-- TEXT -->
+
+    <div>
+
+      <h2 style="
+        font-size:32px;
+      ">
+
+        🚴 Ready For Delivery
+
+      </h2>
+
+      <p style="
+        color:gray;
+        margin-top:15px;
+        line-height:1.7;
+      ">
+
+        Deliver Medicines Safely
+        & Quickly Across The City.
+
+      </p>
+
+      <!-- BUTTON -->
+
+      <button style="
+        margin-top:20px;
+        padding:14px 22px;
+        border:none;
+        border-radius:15px;
+        background:
+          linear-gradient(
+            to right,
+            #2563eb,
+            #7c3aed
+          );
+        color:white;
+        font-size:16px;
+        cursor:pointer;
+      ">
+
+        🚚 Start Delivery
+
+      </button>
+
+    </div>
+
+    <!-- BIKE IMAGE -->
+
+    <img
+
+      src="./images/bike.png"
+
+      alt="Bike"
+
+      style="
+        width:240px;
+        object-fit:contain;
+      "
+    />
+
+  </div>
+
+  <!-- =====================================
+       STATS
+  ====================================== -->
+
+  <div class="cards">
+
+    <!-- PENDING -->
+
+    <div class="card">
+
+      <i
+        class="fa-solid fa-clock"
+        style="
+          font-size:42px;
+          color:#facc15;
+        "
+      ></i>
+
+      <h2>
+
+        12
+
+      </h2>
+
+      <p>
+
+        Pending Deliveries
+
+      </p>
+
+    </div>
+
+    <!-- COMPLETED -->
+
+    <div class="card">
+
+      <i
+        class="fa-solid fa-circle-check"
+        style="
+          font-size:42px;
+          color:#4ade80;
+        "
+      ></i>
+
+      <h2>
+
+        45
+
+      </h2>
+
+      <p>
+
+        Completed Orders
+
+      </p>
+
+    </div>
+
+    <!-- EARNINGS -->
+
+    <div class="card">
+
+      <i
+        class="fa-solid fa-wallet"
+        style="
+          font-size:42px;
+          color:#60a5fa;
+        "
+      ></i>
+
+      <h2>
+
+        ₹4200
+
+      </h2>
+
+      <p>
+
+        Monthly Earnings
+
+      </p>
+
+    </div>
+
+  </div>
+
+  <!-- =====================================
+       LIVE TRACKING
+  ====================================== -->
+
+  <div style="
+    margin-top:40px;
+  ">
+
+    <h2 style="
+      margin-bottom:20px;
+    ">
+
+      📍 Live Tracking
+
+    </h2>
+
+    <div style="
+      background:white;
+      border-radius:25px;
+      padding:30px;
+    ">
+
+      <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        flex-wrap:wrap;
+        gap:20px;
+      ">
+
+        <!-- LEFT -->
+
+        <div>
+
+          <h3>
+
+            Order #ORD-1001
+
+          </h3>
+
+          <p style="
+            color:gray;
+            margin-top:10px;
+          ">
+
+            Ahmednagar →
+            Pune
+
+          </p>
+
+          <p style="
+            margin-top:10px;
+            color:#2563eb;
+            font-weight:600;
+          ">
+
+            Out For Delivery 🚚
+
+          </p>
+
+        </div>
+
+        <!-- MAP -->
+
+        <img
+
+          src="./images/map-marker.png"
+
+          alt="Map Marker"
+
+          style="
+            width:100px;
+            height:100px;
+            object-fit:contain;
+          "
+        />
+
+      </div>
+
+      <!-- PROGRESS -->
+
+      <div style="
+        margin-top:25px;
+        width:100%;
+        height:16px;
+        background:#e2e8f0;
+        border-radius:30px;
+        overflow:hidden;
+      ">
+
+        <div style="
+          width:80%;
+          height:100%;
+          background:
+            linear-gradient(
+              to right,
+              #2563eb,
+              #7c3aed
+            );
+        ">
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- =====================================
+       QUICK ACTIONS
+  ====================================== -->
+
+  <div style="
+    margin-top:40px;
+  ">
+
+    <h2 style="
+      margin-bottom:20px;
+    ">
+
+      ⚡ Quick Actions
+
+    </h2>
+
+    <div style="
+      display:flex;
+      gap:20px;
+      flex-wrap:wrap;
+    ">
+
+      <!-- ORDERS -->
+
+      <button
+
+        onclick="
+          window.location.href=
+          'orders.html'
+        "
+
+        style="
+          padding:16px 28px;
+          border:none;
+          border-radius:15px;
+          background:#2563eb;
+          color:white;
+          font-size:16px;
+          cursor:pointer;
+        "
+      >
+
+        📦 View Orders
+
+      </button>
+
+      <!-- TRACKING -->
+
+      <button
+
+        onclick="
+          window.location.href=
+          'tracking.html'
+        "
+
+        style="
+          padding:16px 28px;
+          border:none;
+          border-radius:15px;
+          background:#7c3aed;
+          color:white;
+          font-size:16px;
+          cursor:pointer;
+        "
+      >
+
+        📍 Open Tracking
+
+      </button>
+
+      <!-- LOGOUT -->
+
+      <button
+
+        onclick="logout()"
+
+        style="
+          padding:16px 28px;
+          border:none;
+          border-radius:15px;
+          background:#ef4444;
+          color:white;
+          font-size:16px;
+          cursor:pointer;
+        "
+      >
+
+        🚪 Logout
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- JS -->
+
+<script src="./js/dashboard.js"></script>
+
+</body>
+</html>

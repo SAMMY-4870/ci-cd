@@ -1,269 +1,455 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CloudShip Admin</title>
 
-  <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:Arial;
-    }
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
 
-    body{
-      background:#f4f7fb;
-      padding:20px;
-    }
+  <title>
 
-    .top{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:20px;
-    }
+    PulseRx Admin Panel
 
-    h1{
-      color:#333;
-    }
+  </title>
 
-    .logout{
-      background:red;
-      color:white;
-      border:none;
-      padding:10px 15px;
-      border-radius:8px;
-      cursor:pointer;
-    }
+  <!-- CSS -->
 
-    .search{
-      width:100%;
-      padding:12px;
-      border:none;
-      border-radius:10px;
-      margin-bottom:20px;
-      font-size:16px;
-      box-shadow:0 0 10px rgba(0,0,0,0.1);
-    }
+  <link
+    rel="stylesheet"
+    href="css/admin.css"
+  />
 
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-      gap:20px;
-    }
+  <!-- FONT AWESOME -->
 
-    .card{
-      background:white;
-      padding:20px;
-      border-radius:15px;
-      box-shadow:0 0 10px rgba(0,0,0,0.1);
-      transition:0.3s;
-    }
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
 
-    .card:hover{
-      transform:translateY(-5px);
-    }
-
-    .name{
-      font-size:22px;
-      font-weight:bold;
-      margin-bottom:10px;
-    }
-
-    .info{
-      margin:5px 0;
-      color:#555;
-    }
-
-    .status{
-      margin-top:15px;
-      padding:8px;
-      border-radius:8px;
-      border:none;
-      width:100%;
-    }
-
-    .delete{
-      margin-top:10px;
-      width:100%;
-      background:#ff4d4d;
-      color:white;
-      border:none;
-      padding:10px;
-      border-radius:8px;
-      cursor:pointer;
-    }
-
-    .stats{
-      display:flex;
-      gap:15px;
-      margin-bottom:20px;
-    }
-
-    .box{
-      flex:1;
-      background:white;
-      padding:20px;
-      border-radius:15px;
-      text-align:center;
-      box-shadow:0 0 10px rgba(0,0,0,0.1);
-    }
-
-    .box h2{
-      color:#007bff;
-    }
-  </style>
 </head>
 
 <body>
 
-<div class="top">
-  <h1>📦 CloudShip Admin</h1>
-  <button class="logout" onclick="logout()">Logout</button>
-</div>
+  <!-- =====================================
+       TOPBAR
+  ====================================== -->
 
-<div class="stats">
-  <div class="box">
-    <h2 id="total">0</h2>
-    <p>Total Orders</p>
-  </div>
+  <div class="top">
 
-  <div class="box">
-    <h2 id="pending">0</h2>
-    <p>Pending</p>
-  </div>
+    <div>
 
-  <div class="box">
-    <h2 id="delivered">0</h2>
-    <p>Delivered</p>
-  </div>
-</div>
+      <h1>
 
-<input
-  type="text"
-  id="search"
-  class="search"
-  placeholder="🔍 Search customer..."
-  onkeyup="loadOrders()"
-/>
+        💊 PulseRx Admin
 
-<div class="grid" id="orders"></div>
+      </h1>
 
-<script>
-const token = localStorage.getItem("token");
+      <p style="
+        color:#cbd5e1;
+        margin-top:8px;
+      ">
 
-if(!token){
-  window.location.href="login.html";
-}
+        Manage Orders,
+        Users &
+        Deliveries 🚀
 
-async function loadOrders(){
+      </p>
 
-  const res = await fetch("http://localhost:5000/orders");
-  const result = await res.json();
+    </div>
 
-  const data = result.data;
+    <!-- RIGHT -->
 
-  const search = document
-    .getElementById("search")
-    .value
-    .toLowerCase();
+    <div style="
+      display:flex;
+      align-items:center;
+      gap:15px;
+    ">
 
-  const filtered = data.filter(order =>
-    order.name.toLowerCase().includes(search)
-  );
+      <!-- LIVE STATUS -->
 
-  document.getElementById("orders").innerHTML="";
+      <div style="
+        background:#1e293b;
+        padding:10px 15px;
+        border-radius:12px;
+        color:#4ade80;
+        font-weight:600;
+      ">
 
-  let pending = 0;
-  let delivered = 0;
-
-  filtered.forEach(order => {
-
-    if(order.status==="Pending") pending++;
-    if(order.status==="Delivered") delivered++;
-
-    document.getElementById("orders").innerHTML += `
-      <div class="card">
-
-        <div class="name">${order.name}</div>
-
-        <div class="info">📱 ${order.mobile}</div>
-
-        <div class="info">📍 ${order.address}</div>
-
-        <div class="info">💊 ${order.medicine}</div>
-
-        <div class="info">🕒 ${order.createdAt}</div>
-
-        <select
-          class="status"
-          onchange="updateStatus('${order.id}', this.value)"
-        >
-          <option ${order.status=="Pending"?"selected":""}>
-            Pending
-          </option>
-
-          <option ${order.status=="Delivered"?"selected":""}>
-            Delivered
-          </option>
-        </select>
-
-        <button
-          class="delete"
-          onclick="deleteOrder('${order.id}')"
-        >
-          Delete Order
-        </button>
+        🟢 System Active
 
       </div>
-    `;
-  });
 
-  document.getElementById("total").innerText = filtered.length;
-  document.getElementById("pending").innerText = pending;
-  document.getElementById("delivered").innerText = delivered;
-}
+      <!-- LOGOUT -->
 
-// ================= UPDATE =================
-async function updateStatus(id,status){
+      <button
+        class="logout"
+        onclick="logout()"
+      >
 
-  await fetch(`http://localhost:5000/order/${id}`,{
-    method:"PUT",
-    headers:{
-      "Content-Type":"application/json",
-      "Authorization":token
-    },
-    body:JSON.stringify({status})
-  });
+        <i class="fa-solid fa-right-from-bracket"></i>
 
-  loadOrders();
-}
+        Logout
 
-// ================= DELETE =================
-async function deleteOrder(id){
+      </button>
 
-  await fetch(`http://localhost:5000/order/${id}`,{
-    method:"DELETE",
-    headers:{
-      "Authorization":token
-    }
-  });
+    </div>
 
-  loadOrders();
-}
+  </div>
 
-// ================= LOGOUT =================
-function logout(){
-  localStorage.removeItem("token");
-  window.location.href="login.html";
-}
+  <!-- =====================================
+       STATS
+  ====================================== -->
 
-setInterval(loadOrders,3000);
+  <div class="stats">
 
-loadOrders();
-</script>
+    <!-- TOTAL -->
+
+    <div class="box">
+
+      <h2 id="total">
+
+        0
+
+      </h2>
+
+      <p>
+
+        📦 Total Orders
+
+      </p>
+
+    </div>
+
+    <!-- PENDING -->
+
+    <div class="box">
+
+      <h2 id="pending">
+
+        0
+
+      </h2>
+
+      <p>
+
+        🕒 Pending Orders
+
+      </p>
+
+    </div>
+
+    <!-- DELIVERED -->
+
+    <div class="box">
+
+      <h2 id="delivered">
+
+        0
+
+      </h2>
+
+      <p>
+
+        ✅ Delivered Orders
+
+      </p>
+
+    </div>
+
+    <!-- ACTIVE USERS -->
+
+    <div class="box">
+
+      <h2 id="activeUsers">
+
+        0
+
+      </h2>
+
+      <p>
+
+        👥 Active Users
+
+      </p>
+
+    </div>
+
+  </div>
+
+  <!-- =====================================
+       SEARCH + FILTER
+  ====================================== -->
+
+  <div style="
+    display:flex;
+    gap:15px;
+    margin-top:30px;
+    flex-wrap:wrap;
+  ">
+
+    <!-- SEARCH -->
+
+    <input
+
+      type="text"
+
+      id="search"
+
+      class="search"
+
+      placeholder="
+        🔍 Search by customer name...
+      "
+
+      onkeyup="loadOrders()"
+    />
+
+    <!-- FILTER -->
+
+    <select
+      id="filterStatus"
+
+      onchange="loadOrders()"
+
+      style="
+        padding:14px;
+        border:none;
+        border-radius:14px;
+        background:#1e293b;
+        color:white;
+        min-width:220px;
+      "
+    >
+
+      <option value="">
+
+        🚚 Filter By Status
+
+      </option>
+
+      <option value="Pending">
+
+        Pending
+
+      </option>
+
+      <option value="Processing">
+
+        Processing
+
+      </option>
+
+      <option value="Assigned">
+
+        Assigned
+
+      </option>
+
+      <option value="Out for Delivery">
+
+        Out for Delivery
+
+      </option>
+
+      <option value="Delivered">
+
+        Delivered
+
+      </option>
+
+    </select>
+
+  </div>
+
+  <!-- =====================================
+       DELIVERY BOYS
+  ====================================== -->
+
+  <div style="
+    margin-top:30px;
+  ">
+
+    <h2 style="
+      color:white;
+      margin-bottom:20px;
+    ">
+
+      🚚 Delivery Partners
+
+    </h2>
+
+    <div style="
+      display:flex;
+      gap:15px;
+      flex-wrap:wrap;
+    ">
+
+      <!-- DELIVERY CARD -->
+
+      <div style="
+        background:#1e293b;
+        padding:20px;
+        border-radius:18px;
+        min-width:220px;
+        color:white;
+      ">
+
+        <h3>
+
+          Rahul
+
+        </h3>
+
+        <p style="
+          margin-top:10px;
+          color:#94a3b8;
+        ">
+
+          📦 12 Deliveries
+
+        </p>
+
+        <p style="
+          margin-top:5px;
+          color:#4ade80;
+        ">
+
+          🟢 Active
+
+        </p>
+
+      </div>
+
+      <!-- DELIVERY CARD -->
+
+      <div style="
+        background:#1e293b;
+        padding:20px;
+        border-radius:18px;
+        min-width:220px;
+        color:white;
+      ">
+
+        <h3>
+
+          Akash
+
+        </h3>
+
+        <p style="
+          margin-top:10px;
+          color:#94a3b8;
+        ">
+
+          📦 8 Deliveries
+
+        </p>
+
+        <p style="
+          margin-top:5px;
+          color:#4ade80;
+        ">
+
+          🟢 Active
+
+        </p>
+
+      </div>
+
+      <!-- DELIVERY CARD -->
+
+      <div style="
+        background:#1e293b;
+        padding:20px;
+        border-radius:18px;
+        min-width:220px;
+        color:white;
+      ">
+
+        <h3>
+
+          Sam
+
+        </h3>
+
+        <p style="
+          margin-top:10px;
+          color:#94a3b8;
+        ">
+
+          📦 5 Deliveries
+
+        </p>
+
+        <p style="
+          margin-top:5px;
+          color:#facc15;
+        ">
+
+          🕒 Busy
+
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- =====================================
+       ORDERS GRID
+  ====================================== -->
+
+  <div
+    class="grid"
+    id="orders"
+  >
+
+  </div>
+
+  <!-- =====================================
+       LOADING
+  ====================================== -->
+
+  <div
+    id="loading"
+
+    style="
+      display:none;
+      text-align:center;
+      margin-top:20px;
+      color:#cbd5e1;
+    "
+  >
+
+    Loading Orders...
+
+  </div>
+
+  <!-- =====================================
+       FOOTER
+  ====================================== -->
+
+  <div style="
+    text-align:center;
+    margin-top:50px;
+    color:#64748b;
+    padding-bottom:30px;
+  ">
+
+    © 2026 PulseRx Admin Panel 🚀
+
+  </div>
+
+  <!-- =====================================
+       JS
+  ====================================== -->
+
+  <script src="js/admin.js"></script>
 
 </body>
 </html>
