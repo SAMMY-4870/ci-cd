@@ -102,7 +102,8 @@ const upload =
 
 app.use(
   express.static(
-    path.join(__dirname, "frontend")
+    path.join(process.cwd(), "frontend")
+
   )
 );
 
@@ -114,8 +115,9 @@ app.get("/", (req, res) => {
 
   res.sendFile(
     path.join(
-      __dirname,
-      "frontend/index.html"
+      process.cwd(),
+      "frontend",
+      "index.html"
     )
   );
 });
