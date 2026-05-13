@@ -121,7 +121,7 @@ app.get("/", (req, res) => {
 
       frontendPath,
 
-      "login.html"
+      "index.html "
     )
   );
 });
