@@ -29,22 +29,22 @@ import {
 const firebaseConfig = {
 
   apiKey:
-    "YOUR_API_KEY",
+    "AIzaSyAixZe9nBiihflCD0cbZWKBogccQYjhkC0",
 
   authDomain:
-    "YOUR_PROJECT.firebaseapp.com",
+    "cloudship-495014.firebaseapp.com",
 
   projectId:
-    "YOUR_PROJECT_ID",
+    "cloudship-495014",
 
   storageBucket:
-    "YOUR_PROJECT.appspot.com",
+    "cloudship-495014.firebasestorage.app",
 
   messagingSenderId:
-    "YOUR_MESSAGING_SENDER_ID",
+    "584731333956",
 
   appId:
-    "YOUR_APP_ID"
+    "1:584731333956:web:62f6f8e7c7756ccb70f311"
 };
 
 // ==========================================
